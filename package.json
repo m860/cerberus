@@ -15,7 +15,15 @@
   "license": "ISC",
   "devDependencies": {
     "commitizen": "^3.0.7",
-    "cz-conventional-changelog": "^2.1.0"
+    "cz-conventional-changelog": "^2.1.0",
+    "react": "16.8.3",
+    "react-native": "0.59.1",
+    "rn-fetch-blob": "^0.10.15"
+  },
+  "peerDependencies": {
+    "react": ">=16",
+    "react-native": ">=0.50",
+    "rn-fetch-blob": "^0.10.15"
   },
   "config": {
     "commitizen": {
