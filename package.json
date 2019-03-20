@@ -1,0 +1,25 @@
+{
+  "name": "@ibuild-community/react-native-applet",
+  "version": "0.0.1",
+  "description": "react native 小程序容器",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "cm": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@cmisgitlab01:ibuild/react-native-applet.git"
+  },
+  "author": "jean.h.ma",
+  "license": "ISC",
+  "devDependencies": {
+    "commitizen": "^3.0.7",
+    "cz-conventional-changelog": "^2.1.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
