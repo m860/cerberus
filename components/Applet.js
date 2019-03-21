@@ -2,19 +2,26 @@ import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
 import PropTypes from "prop-types"
-import {getAppletEntryUrl} from "./Utils";
+import {exportCoreModules, getAppletEntryUrl} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
 import {SocketEvents, ConsoleEvent} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
 import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
+import memoizeOne from "memoize-one"
+import equal from "fast-deep-equal"
+import Console from "./Console"
 
 type Props = AppletOption & {
     navigation: Object,
     renderPrepareScreen: (props: { progress: number }) => React.Element,
     renderErrorScreen: (error: Error) => React.Element,
     id?: string,
-    rootDir?: string
+    rootDir?: string,
+    /**
+     * 导出小程序额外的modules,只需要导出小程序中自定义的modules,React和ReactNative已经自动导出
+     */
+    exportModules: (option: AppletOption) => Object
 }
 
 type State = {
@@ -67,6 +74,20 @@ export default class Applet extends React.Component<Props, State> {
             return this._socketConnectRef.getSocketInstance();
         }
         return null;
+    }
+
+    get _exportModules(): Function {
+        return memoizeOne((option: AppletOption) => {
+            return {
+                Console: new Console(option),
+                ...this.props.exportModules(option),
+            };
+        }, equal);
+    }
+
+    get _appletOption(): AppletOption {
+        const {...rest, navigation, id, rootDir, renderErrorScreen, renderPrepareScreen, exportModules} = this.props;
+        return rest;
     }
 
     _socketConnectRef = null;
@@ -271,10 +292,7 @@ export default class Applet extends React.Component<Props, State> {
             eval(content);
             //TODO 这个检查可以放在CLI中进行实现
             if (this._createApplet && typeof this._createApplet === "function") {
-                this._component = this._createApplet(...AppletModules.exportModules({
-                    ...this.props,
-                    navigation: this.props.navigation
-                }));
+                this._component = this._createApplet(...exportCoreModules(this._appletOption), this._exportModules(this._appletOption));
                 this.setState({
                     status: AppletStatus.compileSuccess
                 });

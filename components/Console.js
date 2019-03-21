@@ -23,7 +23,7 @@ import type {AppletOption} from "./Types";
  * }
  *
  */
-export default class AppletConsole {
+export default class Console {
 
     constructor(option: AppletOption) {
         this._option = option;
