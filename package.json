@@ -16,11 +16,13 @@
   "devDependencies": {
     "commitizen": "^3.0.7",
     "cz-conventional-changelog": "^2.1.0",
+    "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.1",
     "rn-fetch-blob": "^0.10.15"
   },
   "peerDependencies": {
+    "prop-types": "*",
     "react": ">=16",
     "react-native": ">=0.50",
     "rn-fetch-blob": "^0.10.15"
@@ -29,5 +31,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "fbemitter": "^2.1.1",
+    "react-socket-io-client": "^1.0.0"
   }
 }
