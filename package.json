@@ -25,7 +25,7 @@
     "prop-types": "*",
     "react": ">=16",
     "react-native": ">=0.50",
-    "rn-fetch-blob": "^0.10.15"
+    "rn-fetch-blob": "^0.10"
   },
   "config": {
     "commitizen": {
