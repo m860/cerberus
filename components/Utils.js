@@ -8,6 +8,7 @@ import Console from "./Console"
 import Import from "./Import";
 import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
 import {createAppContainer, createMaterialTopTabNavigator, createStackNavigator, withNavigation} from "react-navigation"
+import PropTypes from "prop-types"
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -151,6 +152,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 createAppContainer: createAppContainer,
                 SegmentControls: require("./navigator/SegmentControls").default
             },
+            PropTypes: PropTypes,
             ...exportModules(rest)
         }
     ];
