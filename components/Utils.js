@@ -6,6 +6,7 @@ import memoizeOne from "memoize-one"
 import hoistNonReactStatics from 'hoist-non-react-statics';
 import Console from "./Console"
 import Import from "./Import";
+import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -26,14 +27,6 @@ export function getAppletAssetUrl(option: AppletOption, asset: string): string {
 
 export function mutateImageComponent(ImageComponent: React.Component, option: AppletOption) {
     class WrappedComponent extends React.Component {
-        static propTypes = {
-            /**
-             * 小程序的配置项
-             */
-            forwardedRef: PropTypes.any,
-            source: PropTypes.any
-        };
-
         render() {
             const {source, forwardedRef, ...rest} = this.props;
             const nextSource = typeof source === "string" ? {uri: getAppletAssetUrl(option, source)} : source;
@@ -105,7 +98,10 @@ export const exportCoreModules = (option: AppletOption) => {
             Animated: ReactNative.Animated,
             // AppRegistry: null,
             AppState: ReactNative.AppState,
-            AsyncStorage: require("@react-native-pure/async-storage-extra"),
+            AsyncStorage: {
+                default: new AsyncStorageExtra(option.secretKey),
+                storage: storage
+            },
             BackAndroid: ReactNative.BackAndroid,
             BackHandler: ReactNative.BackHandler,
             CameraRoll: ReactNative.CameraRoll,
@@ -146,7 +142,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
         ...exportCoreModules(rest),
         {
             Console: new Console(rest),
-            Import: new Import(option),
+            Import: (module) => Import(module, option),
             ...exportModules(rest)
         }
     ];
