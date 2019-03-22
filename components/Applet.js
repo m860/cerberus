@@ -2,7 +2,7 @@ import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
 import PropTypes from "prop-types"
-import {exportCoreModules, getAppletEntryUrl} from "./Utils";
+import {exportAllModules, exportCoreModules, getAppletEntryUrl} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
 import {SocketEvents, ConsoleEvent} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
@@ -76,17 +76,17 @@ export default class Applet extends React.Component<Props, State> {
         return null;
     }
 
-    get _exportModules(): Function {
-        return memoizeOne((option: AppletOption) => {
-            return {
-                Console: new Console(option),
-                ...this.props.exportModules(option),
-            };
-        }, equal);
-    }
+    // get _exportModules(): Function {
+    //     return memoizeOne((option: AppletOption) => {
+    //         return {
+    //             Console: new Console(option),
+    //             ...this.props.exportModules(option),
+    //         };
+    //     }, equal);
+    // }
 
-    get _appletOption(): AppletOption {
-        const {...rest, navigation, id, rootDir, renderErrorScreen, renderPrepareScreen, exportModules} = this.props;
+    get _appletOption(): AppletOption & { exportModules: Function } {
+        const {...rest, navigation, id, rootDir, renderErrorScreen, renderPrepareScreen} = this.props;
         return rest;
     }
 
@@ -292,7 +292,7 @@ export default class Applet extends React.Component<Props, State> {
             eval(content);
             //TODO 这个检查可以放在CLI中进行实现
             if (this._createApplet && typeof this._createApplet === "function") {
-                this._component = this._createApplet(...exportCoreModules(this._appletOption), this._exportModules(this._appletOption));
+                this._component = this._createApplet(...exportAllModules(this._appletOption));
                 this.setState({
                     status: AppletStatus.compileSuccess
                 });

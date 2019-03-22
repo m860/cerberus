@@ -4,6 +4,8 @@ import type {AppletOption} from "./Types";
 import equal from "fast-deep-equal"
 import memoizeOne from "memoize-one"
 import hoistNonReactStatics from 'hoist-non-react-statics';
+import Console from "./Console"
+import Import from "./Import";
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -53,7 +55,7 @@ export function mutateImageComponent(ImageComponent: React.Component, option: Ap
 
 }
 
-export const exportCoreModules = memoizeOne((option: AppletOption) => {
+export const exportCoreModules = (option: AppletOption) => {
     return [
         React,
         {
@@ -136,4 +138,20 @@ export const exportCoreModules = memoizeOne((option: AppletOption) => {
             Platform: ReactNative.Platform
         }
     ]
-}, equal);
+}
+
+export const exportAllModules = memoizeOne((option: AppletOption & { exportModules: Function }) => {
+    const {exportModules, ...rest} = option;
+    return [
+        ...exportCoreModules(rest),
+        {
+            Console: new Console(rest),
+            Import: new Import(option),
+            ...exportModules(rest)
+        }
+    ];
+}, (oldArgs: AppletOption & { exportModules: Function }, newArgs: AppletOption & { exportModules: Function }) => {
+    const {exportModules: oldExportModules, ...oldOption} = oldArgs;
+    const {exportModules: newExportModules, ...newOption} = newArgs;
+    return equal(oldOption, newOption);
+});
