@@ -9,6 +9,7 @@ import Import from "./Import";
 import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
 import {createAppContainer, createMaterialTopTabNavigator, createStackNavigator, withNavigation} from "react-navigation"
 import PropTypes from "prop-types"
+import axios from "axios"
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -154,6 +155,23 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             },
             PropTypes: PropTypes,
             Emitter: require("fbemitter"),
+            SkeletonView: require("@react-native-pure/skeleton-view"),
+            Http: axios.create(),
+            UUID: require("uuid"),
+            Icons: {
+                FontAwesome: require("react-native-vector-icons/FontAwesome").default,
+                Evil: require("react-native-vector-icons/EvilIcons").default,
+                AntDesign: require("react-native-vector-icons/AntDesign").default,
+                Entypo: require("react-native-vector-icons/Entypo").default,
+                Material: require("react-native-vector-icons/MaterialIcons").default,
+                MaterialCommunity: require("react-native-vector-icons/MaterialCommunityIcons").default,
+                SimpleLine: require("react-native-vector-icons/SimpleLineIcons").default,
+            },
+            HTML: require("react-native-render-html").default,
+            DatePicker: require("react-native-datepicker").default,
+            Svg: require("react-native-svg"),
+            DeviceInfo: require("react-native-device-info").default,
+            TagSelector: require("@react-native-pure/tag-selector").default,
             ...exportModules(rest)
         }
     ];

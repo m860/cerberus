@@ -14,14 +14,23 @@
   "author": "jean.h.ma",
   "license": "ISC",
   "devDependencies": {
+    "@react-native-pure/skeleton-view": "^1.0.2",
+    "@react-native-pure/tag-selector": "^1.0.0",
+    "axios": "^0.18.0",
     "commitizen": "^3.0.7",
     "cz-conventional-changelog": "^2.1.0",
     "fbemitter": "^2.1.1",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.1",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-device-info": "^1.1.0",
+    "react-native-render-html": "^3.10.0",
+    "react-native-svg": "^8.0.10",
+    "react-native-vector-icons": "^6.4.2",
     "react-navigation": "^3.3.2",
-    "rn-fetch-blob": "^0.10.15"
+    "rn-fetch-blob": "^0.10.15",
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "prop-types": "*",
@@ -29,6 +38,15 @@
     "react-native": ">=0.50",
     "rn-fetch-blob": "^0.10",
     "fbemitter": "^2",
+    "@react-native-pure/skeleton-view": "^1",
+    "axios": "^0.18.0",
+    "uuid": "^3.3.2",
+    "react-native-vector-icons": "^6",
+    "react-native-render-html": "^3.10.0",
+    "react-native-datepicker": "^1.7.2",
+    "react-native-svg": "^8",
+    "react-native-device-info": "^1",
+    "@react-native-pure/tag-selector": "^1",
     "react-navigation": "^3"
   },
   "config": {
