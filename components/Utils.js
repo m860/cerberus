@@ -7,6 +7,7 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import Console from "./Console"
 import Import from "./Import";
 import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
+import {createAppContainer, createMaterialTopTabNavigator, createStackNavigator, withNavigation} from "react-navigation"
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -143,6 +144,13 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
         {
             Console: new Console(rest),
             Import: (module) => Import(module, option),
+            Navigator: {
+                withNavigation: withNavigation,
+                createMaterialTopTabNavigator: createMaterialTopTabNavigator,
+                createStackNavigator: createStackNavigator,
+                createAppContainer: createAppContainer,
+                SegmentControls: require("./navigator/SegmentControls").default
+            },
             ...exportModules(rest)
         }
     ];
