@@ -16,6 +16,7 @@
   "devDependencies": {
     "commitizen": "^3.0.7",
     "cz-conventional-changelog": "^2.1.0",
+    "fbemitter": "^2.1.1",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.1",
@@ -27,6 +28,7 @@
     "react": ">=16",
     "react-native": ">=0.50",
     "rn-fetch-blob": "^0.10",
+    "fbemitter": "^2",
     "react-navigation": "^3"
   },
   "config": {
@@ -37,7 +39,6 @@
   "dependencies": {
     "@react-native-pure/async-storage-extra": "^2",
     "fast-deep-equal": "^2.0.1",
-    "fbemitter": "^2.1.1",
     "hoist-non-react-statics": "^3.3.0",
     "memoize-one": "^5.0.0",
     "react-socket-io-client": "^1",

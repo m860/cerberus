@@ -153,6 +153,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 SegmentControls: require("./navigator/SegmentControls").default
             },
             PropTypes: PropTypes,
+            Emitter: require("fbemitter"),
             ...exportModules(rest)
         }
     ];
