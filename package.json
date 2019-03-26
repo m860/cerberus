@@ -15,6 +15,7 @@
   "author": "jean.h.ma",
   "license": "ISC",
   "devDependencies": {
+    "@ibuild-community/react-native-baidu-map": "https://github.com/ibuild-community/react-native-baidu-map/archive/v1.0.0.tar.gz",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
     "@semantic-release/gitlab": "^3.1.2",
@@ -36,6 +37,7 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
+    "@ibuild-community/react-native-baidu-map": "https://github.com/ibuild-community/react-native-baidu-map/archive/v1.0.0.tar.gz",
     "prop-types": "*",
     "react": ">=16",
     "react-native": ">=0.50",
