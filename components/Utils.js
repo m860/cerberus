@@ -1,6 +1,6 @@
 import * as React from "react"
 import ReactNative from "react-native"
-import type {AppletOption} from "./Types";
+import type {AppletOption, ImagePickerOption, ImagePickerResult} from "./Types";
 import equal from "fast-deep-equal"
 import memoizeOne from "memoize-one"
 import hoistNonReactStatics from 'hoist-non-react-statics';
@@ -10,6 +10,80 @@ import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra
 import {createAppContainer, createMaterialTopTabNavigator, createStackNavigator, withNavigation} from "react-navigation"
 import PropTypes from "prop-types"
 import axios from "axios"
+import Permissions from "react-native-permissions";
+import ImagePicker from "react-native-image-crop-picker"
+
+function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
+    return new Promise((resolve, reject) => {
+        Permissions.check('photo').then((res) => {
+            if (res === 'denied') {
+                reject({
+                    message: "请前往设置开启相册使用权限"
+                })
+            }
+            else {
+                ImagePicker.openPicker(option)
+                    .then(response => {
+                        if (response) {
+                            if (response instanceof Array) {
+                                resolve(response.map(item => {
+                                    return {
+                                        path: item.path,
+                                        width: item.width,
+                                        height: item.height,
+                                        mime: item.mime,
+                                        size: item.size,
+                                        modificationDate: item.modificationDate,
+                                    }
+                                }))
+                            }
+                            else {
+                                resolve({
+                                    path: response.path,
+                                    width: response.width,
+                                    height: response.height,
+                                    mime: response.mime,
+                                    size: response.size,
+                                    modificationDate: response.modificationDate,
+                                })
+                            }
+                        }
+
+                    })
+                    .catch(() => null);
+            }
+        })
+    })
+}
+
+export function alert(message: string, callback: () => void, title: string = "") {
+    ReactNative.Alert.alert(title, message, [{
+        text: "确定",
+        onPress() {
+            if (callback) {
+                callback();
+            }
+        }
+    }]);
+}
+
+export function confirm(message: string, callback: (value: boolean) => void, title: string = "", okText: string = "确定", cancelText: string = "取消") {
+    ReactNative.Alert.alert(title, message, [{
+        text: cancelText,
+        onPress() {
+            if (callback) {
+                callback(false);
+            }
+        }
+    }, {
+        text: okText,
+        onPress() {
+            if (callback) {
+                callback(true);
+            }
+        }
+    }]);
+}
 
 export function getAppletBaseURL(option: AppletOption): string {
     if (option.debug) {
@@ -178,6 +252,13 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 Overlay: require("@ibuild-community/react-native-baidu-map").Overlay,
                 TextMarker: require("@ibuild-community/react-native-baidu-map").TextMarker,
                 ImageMarker: mutateImageComponent(require("@ibuild-community/react-native-baidu-map").ImageMarker, option),
+            },
+            Utils: {
+                formatDate: require("dateformat"),
+                alert: alert,
+                confirm: confirm,
+                update: require("immutability-helper").default,
+                openImagePicker: openImagePicker
             },
             ...exportModules(rest)
         }

@@ -33,3 +33,17 @@ export type AppletOption = {
 export type PrepareScreenProps = {
     progress: number
 };
+
+export type ImagePickerOption = {
+    mediaType: $Values<typeof ImagePickerMediaType>,
+    multiple: boolean
+};
+
+export type ImagePickerResult = {
+    path: string;
+    width: number;
+    height: number;
+    mime: string;
+    size: number,
+    modificationDate: string,
+};
