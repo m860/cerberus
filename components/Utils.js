@@ -12,6 +12,7 @@ import PropTypes from "prop-types"
 import axios from "axios"
 import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
+import createAppletFile from "./createAppletFile";
 
 function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
@@ -213,7 +214,7 @@ export const exportCoreModules = (option: AppletOption) => {
     ]
 }
 
-export const exportAllModules = memoizeOne((option: AppletOption & { exportModules: Function }) => {
+export const exportAllModules = memoizeOne((option: AppletOption & { exportModules: Function, rootDir: string }) => {
     const {exportModules, ...rest} = option;
     return [
         ...exportCoreModules(rest),
@@ -261,6 +262,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 openImagePicker: openImagePicker
             },
             Toast: require("./Toast").default,
+            File: createAppletFile(option),
             ...exportModules(rest)
         }
     ];

@@ -86,7 +86,7 @@ export default class Applet extends React.Component<Props, State> {
     // }
 
     get _appletOption(): AppletOption & { exportModules: Function } {
-        const {navigation, id, rootDir, renderErrorScreen, renderPrepareScreen, ...rest} = this.props;
+        const {navigation, id, renderErrorScreen, renderPrepareScreen, ...rest} = this.props;
         return rest;
     }
 
