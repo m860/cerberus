@@ -260,6 +260,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 update: require("immutability-helper").default,
                 openImagePicker: openImagePicker
             },
+            Toast: require("./Toast").default,
             ...exportModules(rest)
         }
     ];

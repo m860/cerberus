@@ -47,3 +47,10 @@ export type ImagePickerResult = {
     size: number,
     modificationDate: string,
 };
+
+export type ToastOption = Object & {
+    icon: {
+        color: string,
+        size: number
+    }
+}
