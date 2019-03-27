@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@cmisgitlab01:ibuild/react-native-applet.git"
+    "url": "git@cmisgitlab01:ibuild-app/react-native-applet.git"
   },
   "author": "jean.h.ma",
   "license": "ISC",
