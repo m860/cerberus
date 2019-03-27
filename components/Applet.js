@@ -2,15 +2,12 @@ import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
 import PropTypes from "prop-types"
-import {exportAllModules, exportCoreModules, getAppletEntryUrl} from "./Utils";
+import {exportAllModules, getAppletEntryUrl} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
-import {SocketEvents, ConsoleEvent} from "./Events";
+import {ConsoleEvent, SocketEvents} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
 import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
-import memoizeOne from "memoize-one"
-import equal from "fast-deep-equal"
-import Console from "./Console"
 
 type Props = AppletOption & {
     navigation: Object,
