@@ -14,6 +14,7 @@ import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
 import createAppletFile from "./createAppletFile";
 
+
 function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
         Permissions.check('photo').then((res) => {
