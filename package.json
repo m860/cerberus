@@ -41,7 +41,7 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@ibuild-community/react-native-baidu-map": "https://github.com/ibuild-community/react-native-baidu-map/archive/v1.0.0.tar.gz",
+    "@ibuild-community/react-native-baidu-map": "git+https://github.com/ibuild-community/react-native-baidu-map.git#v1.0.0",
     "react-native-image-crop-picker": "^0.23.1",
     "react-native-permissions": "^1.1.1",
     "immutability-helper": "^3",
