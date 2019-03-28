@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "cm": "git-cz",
-    "publish": "semantic-release"
+    "publish": "semantic-release && npm run publish:npm",
+    "publish:npm": "npm publish --registry=http://172.16.0.132:18081/repository/npm-lab/"
   },
   "repository": {
     "type": "git",
@@ -79,5 +80,8 @@
     "memoize-one": "^5.0.0",
     "react-socket-io-client": "^1",
     "socket.io-client": "^2.2.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -9,7 +9,6 @@
         "gitlabUrl": "http://cmisgitlab01",
         "gitlabApiPathPrefix": "/api/v4"
       }
-    ],
-    "@semantic-release/npm"
+    ]
   ]
 }
