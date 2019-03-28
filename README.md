@@ -4,7 +4,7 @@ React Native 小程序容器,默认情况下导出了React,ReactNative,Modules(�
 
 ## Install
 
-react-native-applet发布在内网的npm上的,安装前必须要先配置`.npmrc`来执行npm源
+`@ibuild-community/react-native-applet`发布在内网的npm上的,安装前必须要先配置`.npmrc`来指定npm源
 
 `.npmrc`配置如下
 
