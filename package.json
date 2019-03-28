@@ -6,8 +6,7 @@
   "scripts": {
     "test": "jest",
     "cm": "git-cz",
-    "publish": "semantic-release && npm run publish:npm",
-    "publish:npm": "npm publish"
+    "publish": "semantic-release"
   },
   "repository": {
     "type": "git",
