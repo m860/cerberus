@@ -264,14 +264,15 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             },
             Toast: require("./Toast").default,
             File: createAppletFile(option),
-            Share:{
-                shareToWeChatSceneSession:require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
-                shareToWeChatSceneTimeline:require('@ibuild-community/react-native-share').shareToWeChatSceneTimeline,
-                openWX:require('@ibuild-community/react-native-share').openWX,
-                openSystemShare:require('@ibuild-community/react-native-share').openSystemShare
+            Share: {
+                shareToWeChatSceneSession: require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
+                shareToWeChatSceneTimeline: require('@ibuild-community/react-native-share').shareToWeChatSceneTimeline,
+                openWX: require('@ibuild-community/react-native-share').openWX,
+                openSystemShare: require('@ibuild-community/react-native-share').openSystemShare
             },
-            GalleryViewer:require('@react-native-pure/gallery').default,
+            GalleryViewer: require('@react-native-pure/gallery').default,
             Camera: require("@ibuild-community/react-native-camera").RNCamera,
+            SimpleChart: require("@ibuild-community/simple-chart"),
             ...exportModules(rest)
         }
     ];

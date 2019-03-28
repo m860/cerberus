@@ -18,6 +18,7 @@
     "@ibuild-community/react-native-baidu-map": "^1.0.0",
     "@ibuild-community/react-native-camera": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-camera.git",
     "@ibuild-community/react-native-share": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-share.git",
+    "@ibuild-community/simple-chart": "^1.0.0",
     "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
@@ -44,6 +45,7 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
+    "@ibuild-community/simple-chart": "^1",
     "@ibuild-community/react-native-share": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-share.git",
     "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
     "@ibuild-community/react-native-camera": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-camera.git",
