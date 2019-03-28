@@ -27,6 +27,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "dateformat": "^3.0.3",
     "fbemitter": "^2.1.1",
+    "ghooks": "^2.0.4",
     "immutability-helper": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
@@ -71,6 +72,9 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
+    },
+    "ghooks": {
+      "pre-push": "if [ -d '../hooks' ];then ../hooks/pre-push.sh fi"
     }
   },
   "dependencies": {
