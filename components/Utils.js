@@ -271,6 +271,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 openSystemShare:require('@ibuild-community/react-native-share').openSystemShare
             },
             GalleryViewer:require('@react-native-pure/gallery').default,
+            Camera: require("@ibuild-community/react-native-camera").RNCamera,
             ...exportModules(rest)
         }
     ];
