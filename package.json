@@ -15,7 +15,7 @@
   "author": "jean.h.ma",
   "license": "ISC",
   "devDependencies": {
-    "@ibuild-community/react-native-baidu-map": "https://github.com/ibuild-community/react-native-baidu-map/archive/v1.0.0.tar.gz",
+    "@ibuild-community/react-native-baidu-map": "^1.0.0",
     "@ibuild-community/react-native-share": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-share.git",
     "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
     "@react-native-pure/skeleton-view": "^1.0.2",
@@ -45,7 +45,7 @@
   "peerDependencies": {
     "@ibuild-community/react-native-share": "git+ssh://git@cmisgitlab01:ibuild-app/react-native-share.git",
     "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
-    "@ibuild-community/react-native-baidu-map": "git+https://github.com/ibuild-community/react-native-baidu-map.git#v1.0.0",
+    "@ibuild-community/react-native-baidu-map": "^1",
     "react-native-image-crop-picker": "^0.23.1",
     "react-native-permissions": "^1.1.1",
     "immutability-helper": "^3",
