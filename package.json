@@ -74,7 +74,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     },
     "ghooks": {
-      "pre-push": "if [ -d '../hooks' ];then ../hooks/pre-push.sh fi"
+      "pre-push": "if [[ -d ../hooks ]]; then ../hooks/pre-push.sh; fi"
     }
   },
   "dependencies": {
