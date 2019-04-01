@@ -75,7 +75,10 @@
     "@ibuild-community/simple-chart": "^1.0.0",
     "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
     "@react-native-pure/skeleton-view": "^1.0.2",
-    "@react-native-pure/tag-selector": "^1.0.0"
+    "@react-native-pure/tag-selector": "^1.0.0",
+    "@ibuild-community/react-native-wheel-picker": "*",
+    "@ibuild-community/app-websdk": "^1.3.4",
+    "@ibuild-community/iweb": "^1.0.1"
   },
   "publishConfig": {
     "access": "public",
