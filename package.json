@@ -15,13 +15,6 @@
   "author": "jean.h.ma",
   "license": "ISC",
   "devDependencies": {
-    "@ibuild-community/react-native-baidu-map": "^1.0.0",
-    "@ibuild-community/react-native-camera": "*",
-    "@ibuild-community/react-native-share": "*",
-    "@ibuild-community/simple-chart": "^1.0.0",
-    "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
-    "@react-native-pure/skeleton-view": "^1.0.2",
-    "@react-native-pure/tag-selector": "^1.0.0",
     "@semantic-release/gitlab": "^3.1.2",
     "axios": "^0.18.0",
     "commitizen": "^3.0.7",
@@ -45,11 +38,6 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@ibuild-community/simple-chart": "^1",
-    "@ibuild-community/react-native-share":"*",
-    "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
-    "@ibuild-community/react-native-camera": "*",
-    "@ibuild-community/react-native-baidu-map": "^1",
     "react-native-image-crop-picker": "^0.23.1",
     "react-native-permissions": "^1.1.1",
     "immutability-helper": "^3",
@@ -59,7 +47,6 @@
     "react-native": ">=0.50",
     "rn-fetch-blob": "^0.10",
     "fbemitter": "^2",
-    "@react-native-pure/skeleton-view": "^1",
     "axios": "^0.18.0",
     "uuid": "^3.3.2",
     "react-native-vector-icons": "^6",
@@ -67,7 +54,6 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-svg": "^8",
     "react-native-device-info": "^1",
-    "@react-native-pure/tag-selector": "^1",
     "react-navigation": "^3"
   },
   "config": {
@@ -82,7 +68,14 @@
     "hoist-non-react-statics": "^3.3.0",
     "memoize-one": "^5.0.0",
     "react-socket-io-client": "^1",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "@ibuild-community/react-native-baidu-map": "^1.0.0",
+    "@ibuild-community/react-native-camera": "*",
+    "@ibuild-community/react-native-share": "*",
+    "@ibuild-community/simple-chart": "^1.0.0",
+    "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
+    "@react-native-pure/skeleton-view": "^1.0.2",
+    "@react-native-pure/tag-selector": "^1.0.0"
   },
   "publishConfig": {
     "access": "public",
