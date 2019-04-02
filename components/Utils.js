@@ -13,6 +13,7 @@ import axios from "axios"
 import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
 import createAppletFile from "./createAppletFile";
+import * as ImageUtils from '@ibuild-community/react-native-image-utils'
 
 
 function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
@@ -273,7 +274,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             GalleryViewer: require('@react-native-pure/gallery').default,
             Camera: require("@ibuild-community/react-native-camera").RNCamera,
             SimpleChart: require("@ibuild-community/simple-chart"),
-            ImageUtils:require("@ibuild-community/react-native-image-utils"),
+            ImageUtils:ImageUtils,
             ...exportModules(rest)
         }
     ];
