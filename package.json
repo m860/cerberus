@@ -1,6 +1,6 @@
 {
   "name": "@ibuild-community/react-native-applet",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "react native 小程序容器",
   "main": "index.js",
   "scripts": {
@@ -69,7 +69,7 @@
     "@ibuild-community/react-native-image-utils": "^1.0.0",
     "@ibuild-community/react-native-share": "^1.0.0",
     "@ibuild-community/react-native-wheel-picker": "^1.0.0",
-    "@ibuild-community/simple-chart": "^1.0.0",
+    "@ibuild-community/simple-chart": "^1.0.1",
     "@react-native-pure/async-storage-extra": "^2",
     "@react-native-pure/gallery": "^1",
     "@react-native-pure/skeleton-view": "^1.0.2",
