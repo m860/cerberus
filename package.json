@@ -73,7 +73,7 @@
     "@ibuild-community/react-native-camera": "*",
     "@ibuild-community/react-native-share": "*",
     "@ibuild-community/simple-chart": "^1.0.0",
-    "@react-native-pure/gallery": "git+https://github.com/react-native-pure/gallery.git",
+    "@react-native-pure/gallery": "^1",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
     "@ibuild-community/react-native-wheel-picker": "*",
