@@ -271,7 +271,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 openWX: require('@ibuild-community/react-native-share').openWX,
                 openSystemShare: require('@ibuild-community/react-native-share').openSystemShare
             },
-            GalleryViewer: require('@react-native-pure/gallery').default,
+            Gallery: require('@react-native-pure/gallery').default,
             Camera: require("@ibuild-community/react-native-camera").RNCamera,
             SimpleChart: require("@ibuild-community/simple-chart"),
             ImageUtils:ImageUtils,
