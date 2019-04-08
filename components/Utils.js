@@ -96,7 +96,7 @@ export function getAppletPackageUrl(option: AppletOption): string {
     return `${option.baseURI}/${option.secretKey}/${option.hash}/${option.hash}.zip`;
 }
 
-export function getEntryFile(option: AppletOption & { rootDir: string }): string {
+export function getAppletEntryFile(option: AppletOption & { rootDir: string }): string {
     return `${option.rootDir}/${option.secretKey}/${option.hash}/${option.name}`;
 }
 

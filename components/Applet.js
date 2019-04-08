@@ -2,7 +2,7 @@ import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
 import PropTypes from "prop-types"
-import {exportAllModules, getDebugAppletEntryUrl, getAppletPackageUrl, getEntryFile} from "./Utils";
+import {exportAllModules, getDebugAppletEntryUrl, getAppletPackageUrl, getAppletEntryFile} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
 import {ConsoleEvent, SocketEvents} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
@@ -246,7 +246,7 @@ export default class Applet extends React.Component<Props, State> {
     }
 
     async _loadAppletFromCache(): Promise {
-        const filename = getEntryFile(this.props);
+        const filename = getAppletEntryFile(this.props);
         try {
             const content = await RNFetchBlob.fs.readFile(filename, "utf8");
             return this._compile(content);
@@ -305,7 +305,7 @@ export default class Applet extends React.Component<Props, State> {
     }
 
     _hasCache(): Promise<boolean> {
-        const enterFile = getEntryFile(this.props);
+        const enterFile = getAppletEntryFile(this.props);
         return RNFetchBlob.fs.exists(enterFile)
             .then((exist) => exist)
             .catch(() => false);
@@ -318,7 +318,7 @@ export default class Applet extends React.Component<Props, State> {
             status: AppletStatus.downloading
         });
         const request = RNFetchBlob.config({
-            path: getEntryFile(this.props)
+            path: getAppletEntryFile(this.props)
         }).fetch("GET", url);
         this._downloadRequest = request;
         return request.progress((received, total) => {
@@ -386,7 +386,7 @@ export default class Applet extends React.Component<Props, State> {
                     console.log(`小程序下载成功:${res.path()}`);
                     this._downloadRequest = null;
                     return unzip(packageName, unzipPath).then((path) => {
-                        const enterPath = getEntryFile(this.props);
+                        const enterPath = getAppletEntryFile(this.props);
                         return RNFetchBlob.fs.readFile(enterPath).then(text => {
                             return this._setStateAsync({
                                 status: AppletStatus.downloadSuccess,
