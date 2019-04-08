@@ -14,7 +14,7 @@ import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
 import createAppletFile from "./createAppletFile";
 import * as ImageUtils from '@ibuild-community/react-native-image-utils'
-
+import * as Draw from '@ibuild-community/react-native-draw'
 
 function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
@@ -275,6 +275,13 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             Camera: require("@ibuild-community/react-native-camera").RNCamera,
             SimpleChart: require("@ibuild-community/simple-chart"),
             ImageUtils:ImageUtils,
+            Draw:Draw,
+            Calendar: {
+                default: require("react-native-calendars").Calendar,
+                CalendarList: require("react-native-calendars").CalendarList,
+                Agenda: require("react-native-calendars").Agenda,
+                LocaleConfig: require("react-native-calendars").LocaleConfig,
+            },
             ...exportModules(rest)
         }
     ];

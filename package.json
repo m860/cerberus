@@ -66,6 +66,7 @@
     "@ibuild-community/iweb": "^1.0.1",
     "@ibuild-community/react-native-baidu-map": "^1.0.0",
     "@ibuild-community/react-native-camera": "^1.0.0",
+    "@ibuild-community/react-native-draw": "^1.0.0",
     "@ibuild-community/react-native-image-utils": "^1.0.0",
     "@ibuild-community/react-native-share": "^1.0.0",
     "@ibuild-community/react-native-wheel-picker": "^1.0.0",
@@ -78,6 +79,7 @@
     "fast-deep-equal": "^2.0.1",
     "hoist-non-react-statics": "^3.3.0",
     "memoize-one": "^5.0.0",
+    "react-native-calendars": "^1.30.0",
     "react-socket-io-client": "^1",
     "socket.io-client": "^2.2.0"
   },
