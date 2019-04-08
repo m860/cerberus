@@ -365,13 +365,13 @@ export default class Applet extends React.Component<Props, State> {
 
     async _downloadAppletPackage(): Promise<string> {
         const url = getAppletPackageUrl(this.props);
-        const packageName = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}.zip`;
-        const unzipPath = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}`;
+        const packageFilePath = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}.zip`;
+        const unzipPackageFilePath = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}`;
         await this._setStateAsync({
             status: AppletStatus.downloading
         });
         const request = RNFetchBlob.config({
-            path: packageName
+            path: packageFilePath
         }).fetch("GET", url);
         this._downloadRequest = request;
         return request.progress((received, total) => {
@@ -385,7 +385,9 @@ export default class Applet extends React.Component<Props, State> {
                 if (status === 200) {
                     console.log(`小程序下载成功:${res.path()}`);
                     this._downloadRequest = null;
-                    return unzip(packageName, unzipPath).then((path) => {
+                    return unzip(packageFilePath, unzipPackageFilePath).then((path) => {
+                        //删除zip文件
+                        RNFetchBlob.fs.unlink(packageFilePath).catch(() => null);
                         const enterPath = getAppletEntryFile(this.props);
                         return RNFetchBlob.fs.readFile(enterPath).then(text => {
                             return this._setStateAsync({
