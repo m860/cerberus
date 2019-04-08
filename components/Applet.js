@@ -234,7 +234,7 @@ export default class Applet extends React.Component<Props, State> {
                 await this._loadAppletFromCache();
             }
             else {
-                const content = await this._downloadDebugApplet();
+                const content = await this._downloadAppletPackage();
                 if (content) {
                     await this._compile(content);
                     await this._setStateAsync({
