@@ -2,12 +2,13 @@ import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
 import PropTypes from "prop-types"
-import {exportAllModules, getAppletEntryUrl} from "./Utils";
+import {exportAllModules, getDebugAppletEntryUrl, getAppletPackageUrl, getEntryFile} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
 import {ConsoleEvent, SocketEvents} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
 import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
+import {unzip} from 'react-native-zip-archive'
 
 type Props = AppletOption & {
     navigation: Object,
@@ -57,14 +58,6 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    /**
-     * 小程序的目标地址:基地址/hash/页面名称
-     * @returns {string}
-     * @private
-     */
-    get _url() {
-        return getAppletEntryUrl(this.props);
-    }
 
     get _socket() {
         if (this._socketConnectRef) {
@@ -203,7 +196,7 @@ export default class Applet extends React.Component<Props, State> {
      */
     _appletChanged = async ({hash}) => {
         console.log(`applet changed ${hash}`);
-        const content = await this._downloadApplet();
+        const content = await this._downloadDebugApplet();
         if (content) {
             return this._compile(content);
         }
@@ -227,7 +220,7 @@ export default class Applet extends React.Component<Props, State> {
 
     async _loadApplet() {
         if (this.props.debug) {
-            const content = await this._downloadApplet();
+            const content = await this._downloadDebugApplet();
             if (content) {
                 await this._compile(content);
                 await this._setStateAsync({
@@ -241,7 +234,7 @@ export default class Applet extends React.Component<Props, State> {
                 await this._loadAppletFromCache();
             }
             else {
-                const content = await this._downloadApplet();
+                const content = await this._downloadDebugApplet();
                 if (content) {
                     await this._compile(content);
                     await this._setStateAsync({
@@ -253,7 +246,7 @@ export default class Applet extends React.Component<Props, State> {
     }
 
     async _loadAppletFromCache(): Promise {
-        const filename = this._getFilename();
+        const filename = getEntryFile(this.props);
         try {
             const content = await RNFetchBlob.fs.readFile(filename, "utf8");
             return this._compile(content);
@@ -263,7 +256,7 @@ export default class Applet extends React.Component<Props, State> {
                 status: AppletStatus.downloadFail,
                 error: ex
             });
-            const content = await this._downloadApplet();
+            const content = await this._downloadAppletPackage();
             if (content) {
                 await this._compile(content);
                 await this._setStateAsync({
@@ -311,27 +304,22 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    _getFilename() {
-        const filename = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}/${this.props.name}`;
-        console.log(`小程序的文件名:${filename}`);
-        return filename;
-    }
-
     _hasCache(): Promise<boolean> {
-        const filename = this._getFilename();
-        return RNFetchBlob.fs.exists(filename)
+        const enterFile = getEntryFile(this.props);
+        return RNFetchBlob.fs.exists(enterFile)
             .then((exist) => exist)
             .catch(() => false);
     }
 
-    async _downloadApplet(): Promise<string> {
-        console.log(`开始下载小程序:${this._url}`);
+    async _downloadDebugApplet(): Promise<string> {
+        const url = getDebugAppletEntryUrl(this.props);
+        console.log(`开始下载小程序:${url}`);
         await this._setStateAsync({
             status: AppletStatus.downloading
         });
         const request = RNFetchBlob.config({
-            path: this._getFilename()
-        }).fetch("GET", this._url);
+            path: getEntryFile(this.props)
+        }).fetch("GET", url);
         this._downloadRequest = request;
         return request.progress((received, total) => {
             const downloadProgress = Math.floor((received / total) * 100);
@@ -366,7 +354,63 @@ export default class Applet extends React.Component<Props, State> {
             })
             .catch(async err => {
                 this._downloadRequest = null;
-                console.log(`小程序下载出错:${this._url},${err.message}`);
+                console.log(`小程序下载出错:${getDebugAppletEntryUrl(this.props)},${err.message}`);
+                await this._setStateAsync({
+                    status: AppletStatus.downloadFail,
+                    error: err
+                });
+                return null;
+            })
+    }
+
+    async _downloadAppletPackage(): Promise<string> {
+        const url = getAppletPackageUrl(this.props);
+        const packageName = `${this.props.rootDir}/${this.props.secretKey}/${this.props.package}`;
+        const unzipPath = `${this.props.rootDir}/${this.props.secretKey}`;
+        await this._setStateAsync({
+            status: AppletStatus.downloading
+        });
+        const request = RNFetchBlob.config({
+            path: packageName
+        }).fetch("GET", url);
+        this._downloadRequest = request;
+        return request.progress((received, total) => {
+            const downloadProgress = Math.floor((received / total) * 100);
+            this.setState({
+                downloadProgress: downloadProgress
+            });
+        })
+            .then(async res => {
+                const status = res.respInfo.status;
+                if (status === 200) {
+                    console.log(`小程序下载成功:${res.path()}`);
+                    this._downloadRequest = null;
+                    return unzip(packageName, unzipPath).then((path) => {
+                        const enterPath = getEntryFile(this.props);
+                        return RNFetchBlob.fs.readFile(enterPath).then(text => {
+                            return this._setStateAsync({
+                                status: AppletStatus.downloadSuccess,
+                                error: null
+                            }).then(() => text);
+                        });
+                    }).catch((err) => {
+                        return this._setStateAsync({
+                            status: AppletStatus.downloadFail,
+                            error: err
+                        });
+                    })
+                }
+                else {
+                    await this._setStateAsync({
+                        status: AppletStatus.downloadFail,
+                        error: new Error(`下载失败,status=${status}`)
+                    });
+                    return null;
+                }
+            })
+            .catch(async err => {
+                this._downloadRequest = null;
+                console.log(`小程序下载出错:${url},${err.message}`);
                 await this._setStateAsync({
                     status: AppletStatus.downloadFail,
                     error: err

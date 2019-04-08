@@ -11,6 +11,8 @@ export type AppletOption = {
     debug: boolean,
     /** 访问的页面名称.例如:main.js */
     name: string,
+    /** 生产环境的小程序包名,如:dist.zip,目前只支持zip */
+    package: string,
     /** 小程序的密钥 */
     secretKey: string,
     /** 小程序权限 */
@@ -64,7 +66,7 @@ export type AppletFileDownloadOption = {
 export type AppletFileUploadOption = {
     url: string,
     headers?: Object,
-    buildData:(wrap:Function)=>mixed
+    buildData: (wrap: Function) => mixed
 };
 
 export type AppletFile = {
@@ -73,5 +75,5 @@ export type AppletFile = {
     upload: (option: AppletFileUploadOption) => Promise<mixed>,
     exists: (path: string) => Promise<Boolean>,
     mkdir: (path: string) => Promise,
-    getAbsolutePath:(path:string)=>string
+    getAbsolutePath: (path: string) => string
 };

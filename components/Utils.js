@@ -88,21 +88,23 @@ export function confirm(message: string, callback: (value: boolean) => void, tit
     }]);
 }
 
-export function getAppletBaseURL(option: AppletOption): string {
+export function getDebugAppletEntryUrl(option: AppletOption): string {
+    return `${option.baseURI}/${option.name}`;
+}
+
+export function getAppletPackageUrl(option: AppletOption): string {
+    return `${option.baseURI}/${option.secretKey}/${option.hash}/${option.package}`;
+}
+
+export function getEntryFile(option: AppletOption & { rootDir: string }): string {
+    return `${option.rootDir}/${option.secretKey}/${option.hash}/${option.name}`;
+}
+
+export function getAppletAssetUrl(option: AppletOption & { rootDir: string }, asset: string): string {
     if (option.debug) {
-        return option.baseURI;
+        return `${option.baseURI}/${asset}`;
     }
-    return `${option.baseURI}/${option.secretKey}/${option.hash}`
-}
-
-export function getAppletEntryUrl(option: AppletOption): string {
-    const baseURL = getAppletBaseURL(option);
-    return `${baseURL}/${option.name}`;
-}
-
-export function getAppletAssetUrl(option: AppletOption, asset: string): string {
-    const baseURL = getAppletBaseURL(option);
-    return `${baseURL}/${asset}`;
+    return `${option.rootDir}/${option.secretKey}/${option.hash}/${asset}`;
 }
 
 export function mutateImageComponent(ImageComponent: React.Component, option: AppletOption) {
@@ -274,8 +276,8 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             Gallery: require('@react-native-pure/gallery').default,
             Camera: require("@ibuild-community/react-native-camera").RNCamera,
             SimpleChart: require("@ibuild-community/simple-chart"),
-            ImageUtils:ImageUtils,
-            Draw:Draw,
+            ImageUtils: ImageUtils,
+            Draw: Draw,
             Calendar: {
                 default: require("react-native-calendars").Calendar,
                 CalendarList: require("react-native-calendars").CalendarList,
