@@ -93,7 +93,7 @@ export function getDebugAppletEntryUrl(option: AppletOption): string {
 }
 
 export function getAppletPackageUrl(option: AppletOption): string {
-    return `${option.baseURI}/${option.secretKey}/${option.hash}/${option.package}`;
+    return `${option.baseURI}/${option.secretKey}/${option.hash}/${option.hash}.zip`;
 }
 
 export function getEntryFile(option: AppletOption & { rootDir: string }): string {

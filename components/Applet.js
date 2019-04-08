@@ -365,7 +365,7 @@ export default class Applet extends React.Component<Props, State> {
 
     async _downloadAppletPackage(): Promise<string> {
         const url = getAppletPackageUrl(this.props);
-        const packageName = `${this.props.rootDir}/${this.props.secretKey}/${this.props.package}`;
+        const packageName = `${this.props.rootDir}/${this.props.secretKey}/${this.props.hash}.zip`;
         const unzipPath = `${this.props.rootDir}/${this.props.secretKey}`;
         await this._setStateAsync({
             status: AppletStatus.downloading
