@@ -104,7 +104,11 @@ export function getAppletAssetUrl(option: AppletOption & { rootDir: string }, as
     if (option.debug) {
         return `${option.baseURI}/${asset}`;
     }
-    return `${option.rootDir}/${option.secretKey}/${option.hash}/${asset}`;
+    const assetUri = `${option.rootDir}/${option.secretKey}/${option.hash}/${asset}`;
+    if (ReactNative.Platform.OS === "android") {
+        return `file://${assetUri}`;
+    }
+    return assetUri;
 }
 
 export function mutateImageComponent(ImageComponent: React.Component, option: AppletOption) {
