@@ -288,6 +288,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 Agenda: require("react-native-calendars").Agenda,
                 LocaleConfig: require("react-native-calendars").LocaleConfig,
             },
+            WheelPicker:require("@ibuild-community/react-native-wheel-picker").default,
             ...exportModules(rest)
         }
     ];
