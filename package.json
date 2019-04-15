@@ -71,6 +71,7 @@
     "@ibuild-community/react-native-draw": "^1.0.0",
     "@ibuild-community/react-native-image-utils": "^1.0.0",
     "@ibuild-community/react-native-share": "^1.0.0",
+    "@ibuild-community/react-native-view-shot": "^2.6.0",
     "@ibuild-community/react-native-wheel-picker": "^1.0.0",
     "@ibuild-community/simple-chart": "^1.0.1",
     "@react-native-pure/async-storage-extra": "^2",
