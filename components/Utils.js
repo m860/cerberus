@@ -290,7 +290,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             },
             WheelPicker:require("@ibuild-community/react-native-wheel-picker").default,
             ViewShot:require('@ibuild-community/react-native-view-shot'),
-            VictoryChart:require("victory-native"),
+            VictoryNative:require("victory-native"),
             ...exportModules(rest)
         }
     ];
