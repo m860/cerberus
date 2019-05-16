@@ -291,6 +291,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             WheelPicker:require("@ibuild-community/react-native-wheel-picker").default,
             ViewShot:require('@ibuild-community/react-native-view-shot'),
             VictoryNative:require("victory-native"),
+            FlatListPaging:require("./FlatListPaging").default,
             ...exportModules(rest)
         }
     ];
