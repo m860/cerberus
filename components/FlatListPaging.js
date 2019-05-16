@@ -15,18 +15,14 @@ import {
 type FlatListProps = {
     dataSource: array,
     renderItem: () => React.ReactElement < any >,
-    enabledPageEmptyView? : bool,
     onPageChange: (filter: object, refresh: bool) => void,
+    totalRecords : number,
     initialPageIndex: number,
     initialPageSize? : number,
-    totalRecords? : number,
+    enabledPageEmptyView? : bool,
     renderSeparator? : () => React.ReactElement < any >,
     renderHeader? : () => React.ReactElement < any >,
-    renderItemSeparatorComponent? : () => React.ReactElement < any >,
-    renderEmptyView? : React.ReactElement < any >,
-    emptyTextLines? : array,
-    emptySource? : any,
-    emptyStyle? : any,
+    renderEmptyView? : () => React.ReactElement < any >,
     indicatorColor? : string,
     style? : any,
     initialNumToRender? : number,
@@ -164,7 +160,7 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
             <FlatList
                 ListEmptyComponent={this._renderEmpty}
                 refreshing={this.state.refreshing}
-                ItemSeparatorComponent={this.props.renderItemSeparatorComponent}
+                ItemSeparatorComponent={this.props.renderSeparator}
                 data={this.props.dataSource}
                 extraData={this.props.extraData}
                 renderItem={this.props.renderItem}
@@ -174,6 +170,7 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
                 refreshing={this.state.refreshing}
                 initialNumToRender={this.props.initialNumToRender}
                 ListFooterComponent={this._renderListFooter}
+                ListHeaderComponent={this.props.renderHeader}
             />
         )
     }
