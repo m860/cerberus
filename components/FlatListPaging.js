@@ -8,7 +8,8 @@ import {
     FlatList,
     View,
     Text,
-    ActivityIndicator
+    ActivityIndicator,
+    StyleSheet
 } from "react-native"
 
 
