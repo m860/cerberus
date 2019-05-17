@@ -12,7 +12,7 @@ export const UnderlayColor = "#f1f1f1";
 /**
  * button的默认样式
  */
-const DefaultButtonStyles = StyleSheet.create({
+export const DefaultButtonStyles = StyleSheet.create({
     button: {
         justifyContent: "center",
         alignItems: "center",
@@ -42,7 +42,7 @@ const DefaultButtonStyles = StyleSheet.create({
 /**
  * 退出登录按钮样式
  */
-const LogoutButtonStyles = StyleSheet.create({
+export const LogoutButtonStyles = StyleSheet.create({
     button: {
         alignItems: "center",
         justifyContent: 'center',
@@ -62,7 +62,7 @@ const LogoutButtonStyles = StyleSheet.create({
 /**
  * 按钮样式:白色背景,蓝色文字
  */
-const WhiteButtonStyles = StyleSheet.create({
+export const WhiteButtonStyles = StyleSheet.create({
     button: {
         alignItems: "center",
         justifyContent: 'center',
@@ -92,7 +92,7 @@ const WhiteButtonStyles = StyleSheet.create({
 /**
  * 白色背景带边框的按钮样式
  */
-const WhiteBorderButtonStyles = StyleSheet.create({
+export const WhiteBorderButtonStyles = StyleSheet.create({
     button: {
         alignItems: "center",
         justifyContent: 'center',
@@ -130,7 +130,7 @@ const WhiteBorderButtonStyles = StyleSheet.create({
 /**
  * 选择项目的按钮样式
  */
-const EmptyProjectStyles = StyleSheet.create({
+export const EmptyProjectStyles = StyleSheet.create({
     button: {
         borderRadius: 4,
         borderColor: '#4498F7',
@@ -148,7 +148,7 @@ const EmptyProjectStyles = StyleSheet.create({
 /**
  * 按钮样式:蓝色背景,圆角
  */
-const BlueButtonStyles = StyleSheet.create({
+export const BlueButtonStyles = StyleSheet.create({
     button: {
         backgroundColor: "#339CFA",
         borderRadius: 4,
@@ -180,7 +180,7 @@ const BlueButtonStyles = StyleSheet.create({
  * 按钮样式:蓝色背景,没有圆角
  * @type {{}}
  */
- const BlueButtonNoRadiusStyles = StyleSheet.create({
+export const BlueButtonNoRadiusStyles = StyleSheet.create({
     button: {
         backgroundColor: "#339CFA",
         justifyContent: "center",
@@ -207,13 +207,3 @@ const BlueButtonStyles = StyleSheet.create({
 })
 
 
-
-export default  {
-    BlueButtonNoRadiusStyles,
-    BlueButtonStyles,
-    EmptyProjectStyles,
-    WhiteBorderButtonStyles,
-    WhiteButtonStyles,
-    LogoutButtonStyles,
-    DefaultButtonStyles
-}
