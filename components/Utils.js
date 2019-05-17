@@ -292,6 +292,10 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             ViewShot:require('@ibuild-community/react-native-view-shot'),
             FlatListPaging:require("./FlatListPaging").default,
             VictoryNative:require("victory-native"),
+            Button:{
+                default:require("./button/Button").default,
+                ButtonStyle:require("./button/ButtonStyle").default
+            },
             ...exportModules(rest)
         }
     ];

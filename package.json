@@ -1,6 +1,6 @@
 {
   "name": "@ibuild-community/react-native-applet",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "react native 小程序容器",
   "main": "index.js",
   "scripts": {
