@@ -12,34 +12,41 @@ import {
     StyleSheet
 } from "react-native"
 
+type Filter = {
+    pageIndex: number,
+    pageSize: number
+}
 
 type FlatListProps = {
-    dataSource: array,
-    renderItem: () => React.ReactElement < any >,
-    onPageChange: (filter: object, refresh: bool) => void,
-    totalRecords : number,
+    dataSource: Array,
+    renderItem: () => React.ReactElement<any>,
+    onPageChange: (filter: Filter) => void,
+    totalRecords: number,
     initialPageIndex: number,
-    initialPageSize? : number,
-    enabledPageEmptyView? : bool,
-    renderSeparator? : () => React.ReactElement < any >,
-    renderHeader? : () => React.ReactElement < any >,
-    renderEmptyView? : () => React.ReactElement < any >,
-    indicatorColor? : string,
-    style? : any,
-    initialNumToRender? : number,
-    extraData? : any
+    initialPageSize?: number,
+    enabledPageEmpty?: bool,
+    renderSeparator?: () => React.ReactElement<any>,
+    renderHeader?: () => React.ReactElement<any>,
+    renderFooter?: () => React.ReactElement<any>,
+    renderEmpty?: () => React.ReactElement<any>,
+    indicatorColor?: string,
+    style?: any,
+    initialNumToRender?: number,
+    extraData?: any
+}
+
+type FlatListPagingState = {
+    refreshing: boolean,
+    loadMore: boolean
 }
 
 
-export default class FlatListPaging extends React.Component<FlatListProps> {
+export default class FlatListPaging extends React.Component<FlatListProps, FlatListPagingState> {
 
     static defaultProps = {
-        enabledPageEmptyView: true,
+        enabledPageEmpty: true,
         totalRecords: -1,
-        indicatorColor: 'silver',
-        emptyStyle: {
-            flex: 1
-        }
+        indicatorColor: 'silver'
     }
 
     constructor(props) {
@@ -71,10 +78,10 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
     }
 
     _renderEmpty = () => {
-        if (this.props.enabledPageEmptyView && !this.state.refreshing) {
+        if (this.props.enabledPageEmpty && !this.state.refreshing) {
 
-            if (this.props.renderEmptyView) {
-                return this.props.renderEmptyView()
+            if (this.props.renderEmpty) {
+                return this.props.renderEmpty()
             }
             return (
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -93,7 +100,7 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
             loadMore: false
         }, async () => {
             this.filter.pageIndex = this.props.initialPageIndex;
-            await this.props.onPageChange({...this.filter}, true);
+            await this.props.onPageChange({...this.filter});
             this.setState({
                 refreshing: false
             })
@@ -111,7 +118,7 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
         this.setState({
             loadMore: true
         }, async () => {
-            await this.props.onPageChange({...this.filter}, false);
+            await this.props.onPageChange({...this.filter});
             this.setState({
                 loadMore: false
             })
@@ -159,6 +166,7 @@ export default class FlatListPaging extends React.Component<FlatListProps> {
     render() {
         return (
             <FlatList
+                style={this.props.style}
                 ListEmptyComponent={this._renderEmpty}
                 refreshing={this.state.refreshing}
                 ItemSeparatorComponent={this.props.renderSeparator}
