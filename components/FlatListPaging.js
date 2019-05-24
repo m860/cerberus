@@ -25,7 +25,7 @@ type FlatListProps = {
     onPageChange: (pageIndex: number) => void,
     totalRecords : number, /**总页数**/
     pageIndex:number,
-    initialPageIndex: number, /**第一页的index**/
+    startPageNum: number, /**页码开始位置**/
     initialPageSize: number,  /**每页的item个数**/
     enabledPageEmptyView? : boolean,
     renderSeparator? : () => React.ReactElement < any >,
@@ -37,7 +37,7 @@ type FlatListProps = {
     initialNumToRender? : number,
     extraData? : any,
     keyExtractor?:(item: Object, index: number) => string,
-    enableRefresh:boolean /**是否支持下来刷新，默认支持**/
+    enableRefresh:boolean /**是否支持下拉刷新，默认支持**/
 }
 
 type FlatListState = {
@@ -73,13 +73,13 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
 
     componentWillReceiveProps(nextProps){
         if(nextProps.pageIndex !== this.props.pageIndex &&
-            nextProps.pageIndex === this.props.initialPageIndex &&
+            nextProps.pageIndex === this.props.startPageNum &&
             !this.state.refreshing){
             this._onRefresh()
         }
         else if(
             nextProps.pageIndex !== this.props.pageIndex &&
-            nextProps.pageIndex !== this.props.initialPageIndex &&
+            nextProps.pageIndex !== this.props.startPageNum &&
             !this.state.loadMore ){
             this._onEndReached()
         }
@@ -91,7 +91,7 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
         if (totalRecords === 0) {
             return true;
         }
-        if (Math.ceil(totalRecords / this.props.initialPageSize) <= (this.props.pageIndex || this.props.initialPageIndex )) {
+        if (Math.ceil(totalRecords / this.props.initialPageSize) <= (this.props.pageIndex || this.props.startPageNum )) {
             return true;
         }
         return false;
@@ -123,7 +123,7 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
         this.setState({
             refreshing: true
         }, async () => {
-            await this.props.onPageChange(this.props.initialPageIndex);
+            await this.props.onPageChange(this.props.startPageNum);
             setTimeout(() => {
                 this.setState({
                     refreshing: false
@@ -143,7 +143,7 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
         this.setState({
             loadMore: true
         }, async () => {
-            await this.props.onPageChange((this.props.pageIndex || this.props.initialPageIndex )+1);
+            await this.props.onPageChange((this.props.pageIndex || this.props.startPageNum )+1);
             this.setState({
                 loadMore: false
             })
@@ -161,7 +161,7 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
                     <ActivityIndicator color={this.props.indicatorColor}/>
                 </View>
             )
-        } else if (this.isEnd && this.props.pageIndex > this.props.initialPageIndex) {
+        } else if (this.isEnd && this.props.pageIndex > this.props.startPageNum) {
 
             if (this.props.renderFooter && this.props.renderFooter(LoadMoreStatus.noMore)) {
                 return this.props.renderFooter(LoadMoreStatus.noMore)
