@@ -14,20 +14,20 @@ import {
 
 
 type LoadMoreStatus = {
-    nomal:1,
+    normal:1,
     loading:2,
     noMore:3
 }
 
 type FlatListProps = {
-    dataSource: array,
+    dataSource: Array,
     renderItem: () => React.ReactElement < any >,
     onPageChange: (pageIndex: number) => void,
     totalRecords : number, /**总页数**/
     pageIndex:number,
     initialPageIndex: number, /**第一页的index**/
     initialPageSize: number,  /**每页的item个数**/
-    enabledPageEmptyView? : bool,
+    enabledPageEmptyView? : boolean,
     renderSeparator? : () => React.ReactElement < any >,
     renderHeader? : () => React.ReactElement < any >,
     renderEmptyView? : () => React.ReactElement < any >,
@@ -36,7 +36,8 @@ type FlatListProps = {
     style? : any,
     initialNumToRender? : number,
     extraData? : any,
-    keyExtractor?:(item: object, index: number) => string
+    keyExtractor?:(item: Object, index: number) => string,
+    enableRefresh:boolean /**是否支持下来刷新，默认支持**/
 }
 
 type FlatListState = {
@@ -51,6 +52,7 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
         enabledPageEmptyView: true,
         totalRecords: -1,
         indicatorColor: 'silver',
+        enableRefresh:true,
         emptyStyle: {
             flex: 1
         }
@@ -114,6 +116,9 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
     }
 
     _onRefresh = async () => {
+        if(!this.props.enableRefresh){
+            return
+        }
         let dateTime = new Date().getTime()
         this.setState({
             refreshing: true
