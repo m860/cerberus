@@ -16,7 +16,7 @@ import createAppletFile from "./createAppletFile";
 import * as ImageUtils from '@ibuild-community/react-native-image-utils'
 import * as Draw from '@ibuild-community/react-native-draw'
 
-function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
+export function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
         Permissions.check('photo').then((res) => {
             if (res === 'denied') {
