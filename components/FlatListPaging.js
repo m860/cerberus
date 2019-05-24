@@ -23,10 +23,10 @@ type FlatListProps = {
     dataSource: array,
     renderItem: () => React.ReactElement < any >,
     onPageChange: (pageIndex: number) => void,
-    totalRecords : number,
+    totalRecords : number, /**总页数**/
     pageIndex:number,
-    initialPageIndex: number,
-    initialPageSize: number,
+    initialPageIndex: number, /**第一页的index**/
+    initialPageSize: number,  /**每页的item个数**/
     enabledPageEmptyView? : bool,
     renderSeparator? : () => React.ReactElement < any >,
     renderHeader? : () => React.ReactElement < any >,
@@ -66,14 +66,22 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
 
 
     componentDidMount(){
-
-        this.setState({
-            refreshing:true
-        },()=>{
-            this._onRefresh()
-        })
+        this._onRefresh()
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.pageIndex !== this.props.pageIndex &&
+            nextProps.pageIndex === this.props.initialPageIndex &&
+            !this.state.refreshing){
+            this._onRefresh()
+        }
+        else if(
+            nextProps.pageIndex !== this.props.pageIndex &&
+            nextProps.pageIndex !== this.props.initialPageIndex &&
+            !this.state.loadMore ){
+            this._onEndReached()
+        }
+    }
 
 
     get isEnd() {
@@ -106,14 +114,17 @@ export default class FlatListPaging extends React.Component<FlatListProps,FlatLi
     }
 
     _onRefresh = async () => {
+        let dateTime = new Date().getTime()
         this.setState({
-            refreshing: true,
-            loadMore: false
+            refreshing: true
         }, async () => {
             await this.props.onPageChange(this.props.initialPageIndex);
-            this.setState({
-                refreshing: false
-            })
+            setTimeout(() => {
+                this.setState({
+                    refreshing: false
+                })
+            }, Math.max(0,800- ((new Date()).getTime() - dateTime)))
+
         });
     }
 
