@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     button: {
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "gray",
+        backgroundColor: "#339CFA",
         height: 50,
     },
     disabledButton: {
