@@ -294,7 +294,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             VictoryNative:require("victory-native"),
             Button:{
                 default:require("./button/Button").default,
-                ...require("./button/ButtonStyle")
+                // ...require("./button/ButtonStyle")
             },
             ...exportModules(rest)
         }
