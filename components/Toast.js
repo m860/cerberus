@@ -2,6 +2,7 @@ import * as React from "react"
 import ToastUtils from "@react-native-pure/toast"
 import Icon from "react-native-vector-icons/FontAwesome"
 import type {ToastOption} from "./Types";
+import {View, Text} from "react-native"
 
 function getIconOption(option: ToastOption) {
     let iconProps = {};
@@ -18,28 +19,46 @@ function getIconOption(option: ToastOption) {
 
 export default {
     show: ToastUtils.show,
-    success: (option: ToastOption) => {
-        ToastUtils.show({
-            renderIcon: () => {
-                return <Icon name="check-circle" {...getIconOption(option)}/>
-            },
-            ...option,
-        })
-    },
-    fail: (option: ToastOption) => {
-        ToastUtils.show({
-            renderIcon: () => {
-                return <Icon name="times-circle" {...getIconOption(option)}/>
-            },
-            ...option,
-        })
-    },
-    warn: (option: ToastOption) => {
-        ToastUtils.show({
-            renderIcon: () => {
-                return <Icon name="warning" {...getIconOption(option)}/>
-            },
-            ...option,
-        })
-    }
+    success: (option) => ToastUtils.show(option),
+    fail: (option) => ToastUtils.show(option),
+    warn: (option) => ToastUtils.show(option),
+    // success: (option: ToastOption) => {
+    //     ToastUtils.show({
+    //         renderMessage: (message, style) => {
+    //             return (
+    //                 <View>
+    //                     <Icon name="check-circle" {...getIconOption(option)}/>
+    //                     <Text style={style}>{message}</Text>
+    //                 </View>
+    //             );
+    //         },
+    //         ...option,
+    //     })
+    // },
+    // fail: (option: ToastOption) => {
+    //     ToastUtils.show({
+    //         renderMessage: (message, style) => {
+    //             return (
+    //                 <View>
+    //                     <Icon name="times-circle" {...getIconOption(option)}/>
+    //                     <Text style={style}>{message}</Text>
+    //                 </View>
+    //             );
+    //         },
+    //         ...option,
+    //     })
+    // },
+    // warn: (option: ToastOption) => {
+    //     ToastUtils.show({
+    //         renderMessage: (message, style) => {
+    //             return (
+    //                 <View>
+    //                     <Icon name="warning" {...getIconOption(option)}/>
+    //                     <Text style={style}>{message}</Text>
+    //                 </View>
+    //             );
+    //         },
+    //         ...option,
+    //     })
+    // }
 }
