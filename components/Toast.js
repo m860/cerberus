@@ -20,26 +20,26 @@ export default {
     show: ToastUtils.show,
     success: (option: ToastOption) => {
         ToastUtils.show({
-            ...option,
             renderIcon: () => {
-                return <Icon name="times-circle" {...getIconOption(option)}/>
-            }
+                return <Icon name="check-circle" {...getIconOption(option)}/>
+            },
+            ...option,
         })
     },
     fail: (option: ToastOption) => {
         ToastUtils.show({
-            ...option,
             renderIcon: () => {
-                return <Icon name="check-circle" {...getIconOption(option)}/>
-            }
+                return <Icon name="times-circle" {...getIconOption(option)}/>
+            },
+            ...option,
         })
     },
     warn: (option: ToastOption) => {
         ToastUtils.show({
-            ...option,
             renderIcon: () => {
                 return <Icon name="warning" {...getIconOption(option)}/>
-            }
+            },
+            ...option,
         })
     }
 }
