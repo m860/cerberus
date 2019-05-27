@@ -11,7 +11,27 @@ type Props = {
 };
 
 const styles = StyleSheet.create({
-    disabledText: {}
+    button: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "gray",
+        height: 50,
+    },
+    disabledButton: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "gray",
+        opacity: 0.5,
+        height: 50,
+    },
+    text: {
+        fontSize: 16,
+        color: "white"
+    },
+    disabledText: {
+        fontSize: 16,
+        color: "white"
+    }
 });
 
 function Button(props: Props) {
@@ -19,9 +39,9 @@ function Button(props: Props) {
     return (
         <TouchableOpacity disabled={disabled}
                           onPress={onPress}
-                          style={style}
+                          style={[style, disabled ? styles.disabledButton : styles.button]}
                           activeOpacity={activeOpacity}>
-            <Text style={[textStyle, disabled ? styles.disabledText : null]}>{props.children}</Text>
+            <Text style={[textStyle, disabled ? styles.disabledText : styles.text]}>{props.children}</Text>
         </TouchableOpacity>
     );
 }
