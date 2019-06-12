@@ -12,7 +12,8 @@ import {
     createMaterialTopTabNavigator,
     createStackNavigator,
     withNavigation,
-    HeaderBackButton
+    HeaderBackButton,
+    createBottomTabNavigator
 } from "react-navigation"
 import PropTypes from "prop-types"
 import axios from "axios"
@@ -277,6 +278,11 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                     let initialRoute = findInitialRoute(routeConfigMap, config);
                     applyBackButton(initialRoute, parentNavigation);
                     return createStackNavigator(routeConfigMap, config);
+                },
+                createBottomTabNavigator: function (routeConfigMap, config) {
+                    let initialRoute = findInitialRoute(routeConfigMap, config);
+                    applyBackButton(initialRoute, parentNavigation);
+                    return createBottomTabNavigator(routeConfigMap, config);
                 },
                 createAppContainer: createAppContainer,
                 SegmentControls: require("./navigator/SegmentControls").default
