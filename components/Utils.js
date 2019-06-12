@@ -7,7 +7,13 @@ import hoistNonReactStatics from 'hoist-non-react-statics';
 import Console from "./Console"
 import Import from "./Import";
 import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
-import {createAppContainer, createMaterialTopTabNavigator, createStackNavigator, withNavigation} from "react-navigation"
+import {
+    createAppContainer,
+    createMaterialTopTabNavigator,
+    createStackNavigator,
+    withNavigation,
+    HeaderBackButton
+} from "react-navigation"
 import PropTypes from "prop-types"
 import axios from "axios"
 import Permissions from "react-native-permissions";
@@ -23,8 +29,7 @@ export function openImagePicker(option: ImagePickerOption): Promise<Array<ImageP
                 reject({
                     message: "请前往设置开启相册使用权限"
                 })
-            }
-            else {
+            } else {
                 ImagePicker.openPicker(option)
                     .then(response => {
                         if (response) {
@@ -39,8 +44,7 @@ export function openImagePicker(option: ImagePickerOption): Promise<Array<ImageP
                                         modificationDate: item.modificationDate,
                                     }
                                 }))
-                            }
-                            else {
+                            } else {
                                 resolve({
                                     path: response.path,
                                     width: response.width,
@@ -220,10 +224,43 @@ export const exportCoreModules = (option: AppletOption) => {
             Platform: ReactNative.Platform
         }
     ]
+};
+
+export function findInitialRoute(routeConfigMap, config) {
+    const keys = Object.keys(routeConfigMap);
+    let initialRouteName = keys[0];
+    if (config) {
+        if (config.initialRouteName) {
+            initialRouteName = config.initialRouteName;
+        }
+    }
+    return routeConfigMap[initialRouteName];
 }
 
-export const exportAllModules = memoizeOne((option: AppletOption & { exportModules: Function, rootDir: string }) => {
-    const {exportModules, ...rest} = option;
+export function applyBackButton(route, parentNavigation) {
+    if (!route.navigationOptions) {
+        route.navigationOptions = {};
+    }
+    const backHandler = () => {
+        parentNavigation.goBack();
+    };
+    const HeaderLeft = (
+        <HeaderBackButton onPress={backHandler}></HeaderBackButton>
+    );
+    if (typeof route.navigationOptions === "function") {
+        const navigationOptions = route.navigationOptions;
+        route.navigationOptions = function (...args) {
+            let conf = navigationOptions(...args);
+            conf.headerLeft = HeaderLeft;
+        }
+    } else {
+        route.navigationOptions.headerLeft = HeaderLeft;
+    }
+
+}
+
+export const exportAllModules = memoizeOne((option: AppletOption & { exportModules: Function, rootDir: string, parentNavigation: Object }) => {
+    const {exportModules, parentNavigation, ...rest} = option;
     return [
         ...exportCoreModules(rest),
         {
@@ -231,8 +268,16 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             Import: (module) => Import(module, option),
             Navigator: {
                 withNavigation: withNavigation,
-                createMaterialTopTabNavigator: createMaterialTopTabNavigator,
-                createStackNavigator: createStackNavigator,
+                createMaterialTopTabNavigator: function (routeConfigMap, config) {
+                    let initialRoute = findInitialRoute(routeConfigMap, config);
+                    applyBackButton(initialRoute, parentNavigation);
+                    return createMaterialTopTabNavigator(routeConfigMap, config);
+                },
+                createStackNavigator: function (routeConfigMap, config) {
+                    let initialRoute = findInitialRoute(routeConfigMap, config);
+                    applyBackButton(initialRoute, parentNavigation);
+                    return createStackNavigator(routeConfigMap, config);
+                },
                 createAppContainer: createAppContainer,
                 SegmentControls: require("./navigator/SegmentControls").default
             },
@@ -288,12 +333,12 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 Agenda: require("react-native-calendars").Agenda,
                 LocaleConfig: require("react-native-calendars").LocaleConfig,
             },
-            WheelPicker:require("@ibuild-community/react-native-wheel-picker").default,
-            ViewShot:require('@ibuild-community/react-native-view-shot'),
-            FlatListPaging:require("./FlatListPaging").default,
-            VictoryNative:require("victory-native"),
-            Button:{
-                default:require("./button/Button").default,
+            WheelPicker: require("@ibuild-community/react-native-wheel-picker").default,
+            ViewShot: require('@ibuild-community/react-native-view-shot'),
+            FlatListPaging: require("./FlatListPaging").default,
+            VictoryNative: require("victory-native"),
+            Button: {
+                default: require("./button/Button").default,
                 // ...require("./button/ButtonStyle")
             },
             ...exportModules(rest)

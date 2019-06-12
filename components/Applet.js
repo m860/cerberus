@@ -77,7 +77,10 @@ export default class Applet extends React.Component<Props, State> {
 
     get _appletOption(): AppletOption & { exportModules: Function } {
         const {navigation, id, renderErrorScreen, renderPrepareScreen, ...rest} = this.props;
-        return rest;
+        return {
+            ...rest,
+            parentNavigation: navigation
+        };
     }
 
     _socketConnectRef = null;
@@ -119,11 +122,9 @@ export default class Applet extends React.Component<Props, State> {
             return this.props.renderPrepareScreen({
                 progress: this.state.downloadProgress
             });
-        }
-        else if (this.state.error) {
+        } else if (this.state.error) {
             return this.props.renderErrorScreen(this.state.error);
-        }
-        else if (this._component) {
+        } else if (this._component) {
             return (
                 <React.Fragment>
                     <this._component></this._component>
@@ -162,8 +163,7 @@ export default class Applet extends React.Component<Props, State> {
             || nextState.status === AppletStatus.rendering) {
             console.warn(`以下状态不执行rerender:下载成功,编译中,渲染中,渲染成功`);
             return false;
-        }
-        else if (nextState.status === AppletStatus.downloading
+        } else if (nextState.status === AppletStatus.downloading
             && this.state.downloadProgress === nextState.downloadProgress) {
             console.warn(`如果是正在下载且下载进度没有变化不执行rerender`);
             return false;
@@ -227,13 +227,11 @@ export default class Applet extends React.Component<Props, State> {
                     status: AppletStatus.rendering
                 });
             }
-        }
-        else {
+        } else {
             const hasCache = await this._hasCache();
             if (hasCache) {
                 await this._loadAppletFromCache();
-            }
-            else {
+            } else {
                 const content = await this._downloadAppletPackage();
                 if (content) {
                     await this._compile(content);
@@ -250,8 +248,7 @@ export default class Applet extends React.Component<Props, State> {
         try {
             const content = await RNFetchBlob.fs.readFile(filename, "utf8");
             return this._compile(content);
-        }
-        catch (ex) {
+        } catch (ex) {
             await this._setStateAsync({
                 status: AppletStatus.downloadFail,
                 error: ex
@@ -286,16 +283,14 @@ export default class Applet extends React.Component<Props, State> {
                 this.setState({
                     status: AppletStatus.compileSuccess
                 });
-            }
-            else {
+            } else {
                 console.log(`小程序的入口必须是一个Function对象`);
                 await this._setStateAsync({
                     status: AppletStatus.compileFail,
                     error: new Error("小程序的入口必须是一个函数")
                 });
             }
-        }
-        catch (ex) {
+        } catch (ex) {
             console.log(`小程序编译失败:${ex.message}`);
             await this._setStateAsync({
                 status: AppletStatus.compileFail,
@@ -343,8 +338,7 @@ export default class Applet extends React.Component<Props, State> {
                             error: err
                         });
                     });
-                }
-                else {
+                } else {
                     await this._setStateAsync({
                         status: AppletStatus.downloadFail,
                         error: new Error(`下载失败,status=${status}`)
@@ -401,8 +395,7 @@ export default class Applet extends React.Component<Props, State> {
                             error: err
                         });
                     })
-                }
-                else {
+                } else {
                     await this._setStateAsync({
                         status: AppletStatus.downloadFail,
                         error: new Error(`下载失败,status=${status}`)
