@@ -347,6 +347,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                 default: require("./button/Button").default,
                 // ...require("./button/ButtonStyle")
             },
+            TabView: require("react-native-tab-view"),
             ...exportModules(rest)
         }
     ];
