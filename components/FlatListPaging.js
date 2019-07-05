@@ -208,6 +208,7 @@ export default class FlatListPaging extends React.PureComponent<FlatListProps, F
                       initialNumToRender={this.props.initialNumToRender}
                       ListFooterComponent={this._renderListFooter}
                       ListHeaderComponent={this.props.renderHeader}
+                      {...this.props}
             />
         )
     }
