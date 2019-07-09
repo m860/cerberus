@@ -5,6 +5,7 @@
 
 import * as React from "react"
 import {ActivityIndicator, FlatList, StyleSheet, Text, View} from "react-native"
+import type {Props as RNFlatListProps} from "react-native/Libraries/Lists/FlatList";
 
 
 const LoadMoreStatus = {
@@ -13,29 +14,29 @@ const LoadMoreStatus = {
     noMore: 3
 };
 
-type FlatListProps = {
-    dataSource: Array,
-    renderItem: () => React.ReactElement<any>,
-    onPageChange: (pageIndex: number) => void,
-    totalRecords: number, /**总页数**/
-    pageIndex: number,
-    startPageNum: number, /**页码开始位置**/
-    pageSize: number, /**每页的item个数**/
-    renderSeparator?: () => React.ReactElement<any>,
-    renderHeader?: () => React.ReactElement<any>,
-    renderEmpty?: () => React.ReactElement<any>,
-    renderFooter?: (status: $Values<typeof LoadMoreStatus>)=>React.ReactElement<any>,
-    indicatorColor?: string,
-    style?: any,
-    initialNumToRender?: number,
-    extraData?: any,
-    keyExtractor?: (item: Object, index: number) => string,
-    enableRefresh: boolean /**是否支持下拉刷新，默认支持**/
-}
+type FlatListProps = RNFlatListProps<{
+    dataSource:Array,
+    renderItem:() => React.ReactElement<any>,
+    onPageChange:( pageIndex:number ) => void,
+    totalRecords:number, /**总页数**/
+    pageIndex:number,
+    startPageNum:number, /**页码开始位置**/
+    pageSize:number, /**每页的item个数**/
+    renderSeparator?:() => React.ReactElement<any>,
+    renderHeader?:() => React.ReactElement<any>,
+    renderEmpty?:() => React.ReactElement<any>,
+    renderFooter?:( status:$Values<typeof LoadMoreStatus> )=>React.ReactElement<any>,
+    indicatorColor?:string,
+    style?:any,
+    initialNumToRender?:number,
+    extraData?:any,
+    keyExtractor?:( item:Object, index:number ) => string,
+    enableRefresh:boolean /**是否支持下拉刷新，默认支持**/
+}>
 
 type FlatListState = {
-    refreshing: boolean,
-    loadMore: boolean
+    refreshing:boolean,
+    loadMore:boolean
 }
 
 const styles = StyleSheet.create({
@@ -86,7 +87,7 @@ export default class FlatListPaging extends React.PureComponent<FlatListProps, F
         )
     }
 
-    constructor(props) {
+    constructor( props ) {
         super(props);
         this.state = {
             refreshing: false,
@@ -193,22 +194,23 @@ export default class FlatListPaging extends React.PureComponent<FlatListProps, F
     }
 
     render() {
+        const {style, keyExtractor, renderSeparator, dataSource, extraData, renderItem, initialNumToRender, renderHeader, ...reset} = this.props
         return (
-            <FlatList style={this.props.style}
-                      keyExtractor={this.props.keyExtractor}
+            <FlatList style={style}
+                      keyExtractor={keyExtractor}
                       ListEmptyComponent={this._renderEmpty}
                       refreshing={this.state.refreshing}
-                      ItemSeparatorComponent={this.props.renderSeparator}
-                      data={this.props.dataSource}
-                      extraData={this.props.extraData}
-                      renderItem={this.props.renderItem}
+                      ItemSeparatorComponent={renderSeparator}
+                      data={dataSource}
+                      extraData={extraData}
+                      renderItem={renderItem}
                       onRefresh={this._onRefresh}
                       onEndReached={this._onEndReached}
                       onEndReachedThreshold={0.5}
-                      initialNumToRender={this.props.initialNumToRender}
+                      initialNumToRender={initialNumToRender}
                       ListFooterComponent={this._renderListFooter}
-                      ListHeaderComponent={this.props.renderHeader}
-                      {...this.props}
+                      ListHeaderComponent={renderHeader}
+                      {...reset}
             />
         )
     }
