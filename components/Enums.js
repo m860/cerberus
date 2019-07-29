@@ -1,10 +1,8 @@
 /**
  * 小程序的渲染类型
- * @property web - web渲染
- * @property native - native渲染
  */
 export const RenderType = {
-    web: "web",
+    web: "webView",
     native: "native"
 };
 
