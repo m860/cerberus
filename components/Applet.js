@@ -1,3 +1,6 @@
+/**
+ * @flow
+ */
 import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
@@ -9,17 +12,20 @@ import {SocketConnect, SocketEvent} from "react-socket-io-client"
 import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
 import {unzip} from 'react-native-zip-archive'
+import StatefulPromise from "rn-fetch-blob/class/StatefulPromise";
 
 type Props = AppletOption & {
     navigation: Object,
-    renderPrepareScreen: (props: { progress: number }) => React.Element,
-    renderErrorScreen: (error: Error) => React.Element,
+    renderPrepareScreen: (props: { progress: number }) => React.Element<*>,
+    renderErrorScreen: (error: Error) => React.Element<*>,
     id?: string,
     rootDir?: string,
     /**
      * 导出小程序额外的modules,只需要导出小程序中自定义的modules,React和ReactNative已经自动导出
      */
-    exportModules: (option: AppletOption) => Object
+    exportModules: (option: AppletOption) => Object,
+    // 小程序的初始化props
+    initialProps?: ?Object
 }
 
 type State = {
@@ -42,7 +48,7 @@ export default class Applet extends React.Component<Props, State> {
         rootDir: RNFetchBlob.fs.dirs.CacheDir + "/applets"
     };
 
-    static getDerivedStateFromError(error) {
+    static getDerivedStateFromError(error: any) {
         return {
             error: error
         }
@@ -85,13 +91,12 @@ export default class Applet extends React.Component<Props, State> {
 
     _socketConnectRef = null;
     _listeners = [];
+    _createApplet: Function = null;
+    _component = null;
+    _downloadRequest = null;
 
-
-    constructor(props) {
+    constructor(props: Props) {
         super(props);
-        this._createApplet = null;
-        this._component = null;
-        this._downloadRequest = null;
         this.state = {
             downloadProgress: 0,
             status: AppletStatus.prepare,
@@ -125,9 +130,11 @@ export default class Applet extends React.Component<Props, State> {
         } else if (this.state.error) {
             return this.props.renderErrorScreen(this.state.error);
         } else if (this._component) {
+            const RealComponent = this._component;
+            const {initialProps = {}} = this.props;
             return (
                 <React.Fragment>
-                    <this._component></this._component>
+                    <RealComponent {...initialProps}></RealComponent>
                     {this._renderSocket()}
                 </React.Fragment>
             )
@@ -155,7 +162,7 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
         //如果render success则不进行render操作,只是状态变化
         if (nextState.status === AppletStatus.renderSuccess
             || nextState.status === AppletStatus.downloadSuccess
@@ -171,7 +178,7 @@ export default class Applet extends React.Component<Props, State> {
         return true;
     }
 
-    componentDidUpdate(nextProps, nextState) {
+    componentDidUpdate(nextProps: Props, nextState: State) {
         if (this.state.status === AppletStatus.prepare) {
             this._loadApplet().then(() => {
                 this.setState({
@@ -202,7 +209,7 @@ export default class Applet extends React.Component<Props, State> {
         }
     };
 
-    _setStateAsync(newState): Promise {
+    _setStateAsync(newState): Promise<*> {
         return new Promise((resolve) => {
             this.setState(newState, resolve);
         });
@@ -243,7 +250,7 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    async _loadAppletFromCache(): Promise {
+    async _loadAppletFromCache(): Promise<*> {
         const filename = getAppletEntryFile(this.props);
         try {
             const content = await RNFetchBlob.fs.readFile(filename, "utf8");
@@ -312,10 +319,11 @@ export default class Applet extends React.Component<Props, State> {
         await this._setStateAsync({
             status: AppletStatus.downloading
         });
-        const request = RNFetchBlob.config({
+        const request: StatefulPromise<*> = RNFetchBlob.config({
             path: getAppletEntryFile(this.props)
         }).fetch("GET", url);
         this._downloadRequest = request;
+        // @FlowFixMe
         return request.progress((received, total) => {
             const downloadProgress = Math.floor((received / total) * 100);
             this.setState({
@@ -364,7 +372,7 @@ export default class Applet extends React.Component<Props, State> {
         await this._setStateAsync({
             status: AppletStatus.downloading
         });
-        const request = RNFetchBlob.config({
+        const request: StatefulPromise<*> = RNFetchBlob.config({
             path: packageFilePath
         }).fetch("GET", url);
         this._downloadRequest = request;
@@ -383,7 +391,7 @@ export default class Applet extends React.Component<Props, State> {
                         //删除zip文件
                         RNFetchBlob.fs.unlink(packageFilePath).catch(() => null);
                         const enterPath = getAppletEntryFile(this.props);
-                        return RNFetchBlob.fs.readFile(enterPath).then(text => {
+                        return RNFetchBlob.fs.readFile(enterPath, "utf8").then(text => {
                             return this._setStateAsync({
                                 status: AppletStatus.downloadSuccess,
                                 error: null

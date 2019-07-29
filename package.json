@@ -21,6 +21,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "dateformat": "^3.0.3",
     "fbemitter": "^2.1.1",
+    "flow-bin": "^0.92.0",
     "immutability-helper": "^3.0.0",
     "prop-types": "^15.7.2",
     "react": "16.8.3",
@@ -32,11 +33,11 @@
     "react-native-render-html": "^3.10.0",
     "react-native-svg": "^8.0.10",
     "react-native-vector-icons": "^6.4.2",
+    "react-native-zip-archive": "^3.0.1",
     "react-navigation": "^3.3.2",
     "rn-fetch-blob": "^0.10.15",
     "semantic-release": "^15.13.3",
-    "uuid": "^3.3.2",
-    "react-native-zip-archive": "^3.0.1"
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "react-native-image-crop-picker": "*",
