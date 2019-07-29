@@ -1,6 +1,6 @@
-export {default} from "./components/Applet"
+export {default, AppletContext} from "./components/Applet"
 export {default as ToastUtils} from "./components/Toast"
 export {mutateImageComponent, openImagePicker, alert, confirm} from "./components/Utils"
 export {default as Button} from "./components/button/Button"
 export * from "./components/button/ButtonStyle"
-export {default as FlatListPaging } from "./components/FlatListPaging"
+export {default as FlatListPaging} from "./components/FlatListPaging"

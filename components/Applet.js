@@ -4,8 +4,7 @@
 import * as React from "react"
 import {AppletStatus} from "./Enums";
 import type {AppletOption} from "./Types";
-import PropTypes from "prop-types"
-import {exportAllModules, getDebugAppletEntryUrl, getAppletPackageUrl, getAppletEntryFile} from "./Utils";
+import {exportAllModules, getAppletEntryFile, getAppletPackageUrl, getDebugAppletEntryUrl} from "./Utils";
 import ErrorHandler from "./ErrorHandler"
 import {ConsoleEvent, SocketEvents} from "./Events";
 import {SocketConnect, SocketEvent} from "react-socket-io-client"
@@ -13,6 +12,7 @@ import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
 import {unzip} from 'react-native-zip-archive'
 import StatefulPromise from "rn-fetch-blob/class/StatefulPromise";
+import type {NavigationScreenProp} from "react-navigation"
 
 type Props = AppletOption & {
     navigation: Object,
@@ -37,6 +37,8 @@ type State = {
     error: ?Error
 };
 
+export const AppletContext = React.createContext<NavigationScreenProp>(null)
+
 /**
  * 小程序容器
  */
@@ -54,15 +56,15 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    static childContextTypes = {
-        parentNavigation: PropTypes.object
-    };
-
-    getChildContext() {
-        return {
-            parentNavigation: this.props.navigation
-        }
-    }
+    // static childContextTypes = {
+    //     parentNavigation: PropTypes.object
+    // };
+    //
+    // getChildContext() {
+    //     return {
+    //         parentNavigation: this.props.navigation
+    //     }
+    // }
 
 
     get _socket() {
@@ -131,12 +133,12 @@ export default class Applet extends React.Component<Props, State> {
             return this.props.renderErrorScreen(this.state.error);
         } else if (this._component) {
             const RealComponent = this._component;
-            const {initialProps = {}} = this.props;
+            const {initialProps = {}, navigation} = this.props;
             return (
-                <React.Fragment>
+                <AppletContext.Provider value={navigation}>
                     <RealComponent {...initialProps}></RealComponent>
                     {this._renderSocket()}
-                </React.Fragment>
+                </AppletContext.Provider>
             )
         }
         return null;
