@@ -12,7 +12,6 @@ import RNFetchBlob from "rn-fetch-blob";
 import Emitter from "./Emitter"
 import {unzip} from 'react-native-zip-archive'
 import StatefulPromise from "rn-fetch-blob/class/StatefulPromise";
-import type {NavigationScreenProp} from "react-navigation"
 
 type Props = AppletOption & {
     navigation: Object,
@@ -37,8 +36,6 @@ type State = {
     error: ?Error
 };
 
-export const AppletContext = React.createContext<NavigationScreenProp>(null)
-
 /**
  * 小程序容器
  */
@@ -56,32 +53,12 @@ export default class Applet extends React.Component<Props, State> {
         }
     }
 
-    // static childContextTypes = {
-    //     parentNavigation: PropTypes.object
-    // };
-    //
-    // getChildContext() {
-    //     return {
-    //         parentNavigation: this.props.navigation
-    //     }
-    // }
-
-
     get _socket() {
         if (this._socketConnectRef) {
             return this._socketConnectRef.getSocketInstance();
         }
         return null;
     }
-
-    // get _exportModules(): Function {
-    //     return memoizeOne((option: AppletOption) => {
-    //         return {
-    //             Console: new Console(option),
-    //             ...this.props.exportModules(option),
-    //         };
-    //     }, equal);
-    // }
 
     get _appletOption(): AppletOption & { exportModules: Function } {
         const {navigation, id, renderErrorScreen, renderPrepareScreen, ...rest} = this.props;
@@ -135,10 +112,10 @@ export default class Applet extends React.Component<Props, State> {
             const RealComponent = this._component;
             const {initialProps = {}, navigation} = this.props;
             return (
-                <AppletContext.Provider value={navigation}>
+                <React.Fragment>
                     <RealComponent {...initialProps}></RealComponent>
                     {this._renderSocket()}
-                </AppletContext.Provider>
+                </React.Fragment>
             )
         }
         return null;
