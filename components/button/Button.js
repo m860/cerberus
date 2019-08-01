@@ -39,7 +39,7 @@ function Button(props: Props) {
     return (
         <TouchableOpacity disabled={disabled}
                           onPress={onPress}
-                          style={disabled ? [style, styles.disabledButton] : [styles.button, style]}
+                          style={disabled ? [styles.disabledButton, style] : [styles.button, style]}
                           activeOpacity={activeOpacity}>
             <Text style={disabled ? [textStyle, styles.disabledText] : [styles.text, textStyle]}>{props.children}</Text>
         </TouchableOpacity>
