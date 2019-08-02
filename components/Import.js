@@ -24,5 +24,9 @@ export default function (module: Function | Object, option: AppletOption & { exp
     if (typeof factory !== "function") {
         throw new Error(`Import失败,请参考API文档`);
     }
-    return factory(...exportAllModules(option));
+    if (factory.__wasInvoked) {
+        return factory.__result;
+    }
+    factory.__wasInvoked = true;
+    return (factory.__result = factory(...exportAllModules(option)));
 }
