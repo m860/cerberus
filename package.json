@@ -63,7 +63,9 @@
     "@ibuild-community/react-native-camera": ">=1",
     "@ibuild-community/react-native-image-utils": ">=1",
     "@ibuild-community/react-native-view-shot": ">=2",
-    "@ibuild-community/react-native-wheel-picker": ">=1"
+    "@ibuild-community/react-native-wheel-picker": ">=1",
+    "@react-native-pure/ibuild-modal": ">=1"
+
   },
   "config": {
     "commitizen": {
@@ -77,7 +79,6 @@
     "@ibuild-community/simple-chart": "^1.0.1",
     "@react-native-pure/async-storage-extra": "^2",
     "@react-native-pure/gallery": "^1.0.1",
-    "@react-native-pure/ibuild-modal": "^1.0.0",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
     "@react-native-pure/toast": "^2.0.0",

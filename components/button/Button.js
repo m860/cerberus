@@ -7,6 +7,8 @@ type Props = {
     style?: any,
     textStyle?: any,
     activeOpacity?: number,
+    disableTextStyle?:any,
+    disableStyle?:any,
     children: string
 };
 
@@ -35,13 +37,13 @@ const styles = StyleSheet.create({
 });
 
 function Button(props: Props) {
-    const {disabled, onPress, style, activeOpacity, textStyle} = props;
+    const {disabled, onPress, style, activeOpacity, textStyle,disableTextStyle,disableStyle} = props;
     return (
         <TouchableOpacity disabled={disabled}
                           onPress={onPress}
-                          style={disabled ? [styles.disabledButton, style] : [styles.button, style]}
+                          style={disabled ? [styles.disabledButton, style,disableStyle] : [styles.button, style]}
                           activeOpacity={activeOpacity}>
-            <Text style={disabled ? [textStyle, styles.disabledText] : [styles.text, textStyle]}>{props.children}</Text>
+            <Text style={disabled ? [textStyle, styles.disabledText,disableTextStyle] : [styles.text, textStyle]}>{props.children}</Text>
         </TouchableOpacity>
     );
 }
