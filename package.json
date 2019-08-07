@@ -1,6 +1,6 @@
 {
   "name": "@ibuild-community/react-native-applet",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "react native 小程序容器",
   "main": "index.js",
   "scripts": {
@@ -65,7 +65,6 @@
     "@ibuild-community/react-native-view-shot": ">=2",
     "@ibuild-community/react-native-wheel-picker": ">=1",
     "@react-native-pure/ibuild-modal": ">=1"
-
   },
   "config": {
     "commitizen": {
