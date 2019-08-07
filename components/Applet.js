@@ -24,7 +24,9 @@ type Props = AppletOption & {
      */
     exportModules: (option: AppletOption) => Object,
     // 小程序的初始化props
-    initialProps?: ?Object
+    initialProps?: ?Object,
+    // 小程序加载成功
+    onLoadSuccess?: ()=>any
 }
 
 type State = {
@@ -164,6 +166,10 @@ export default class Applet extends React.Component<Props, State> {
                     status: AppletStatus.renderSuccess
                 });
             });
+        }
+        if (this._component) {
+            const {onLoadSuccess} = nextProps;
+            onLoadSuccess && onLoadSuccess();
         }
     }
 
