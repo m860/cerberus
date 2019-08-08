@@ -38,6 +38,18 @@ type State = {
     error: ?Error
 };
 
+type AppletRequire = (module: string) => any;
+
+function createAppletExecutable(code: string, scope = {}) {
+    const scopeKeys = Object.keys(scope);
+    const appletExecutable = new Function(...scopeKeys, code);
+    return {
+        exec(self: any) {
+            appletExecutable.apply(self, scopeKeys.map(key => scope[key]));
+        }
+    }
+}
+
 /**
  * 小程序容器
  */
@@ -268,10 +280,30 @@ export default class Applet extends React.Component<Props, State> {
             status: AppletStatus.compiling
         });
         try {
-            eval(content);
+            createAppletExecutable(content, {
+                __AppletRequire:(moduleName: string) => {
+                    const allModules = exportAllModules(this._appletOption);
+                    switch (moduleName) {
+                        case 'react': {
+                            return allModules[0];
+                        }
+                        case 'react-native': {
+                            return allModules[1];
+                        }
+                        case '@ibuild-community/applet': {
+                            return allModules[2];
+                        }
+                    }
+                }
+            }).exec(this);
+            const _createApplet = this._createApplet;
             //TODO 这个检查可以放在CLI中进行实现
-            if (this._createApplet && typeof this._createApplet === "function") {
-                this._component = this._createApplet(...exportAllModules(this._appletOption));
+            if (_createApplet && typeof _createApplet === "function") {
+                if (_createApplet.metadata && _createApplet.metadata.buildType === "normal") {
+                    this._component = _createApplet;
+                } else {
+                    this._component = this._createApplet(...exportAllModules(this._appletOption));
+                }
                 this.setState({
                     status: AppletStatus.compileSuccess
                 });
