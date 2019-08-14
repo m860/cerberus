@@ -64,7 +64,9 @@
     "@ibuild-community/react-native-image-utils": ">=1",
     "@ibuild-community/react-native-view-shot": ">=2",
     "@ibuild-community/react-native-wheel-picker": ">=1",
-    "@react-native-pure/ibuild-modal": ">=1"
+    "@react-native-pure/ibuild-modal": ">=1",
+    "@react-native-pure/gallery": ">=1",
+    "@ibuild-community/react-native-draw": ">=1"
   },
   "config": {
     "commitizen": {
@@ -74,10 +76,8 @@
   "dependencies": {
     "@ibuild-community/app-websdk": "^1.3.4",
     "@ibuild-community/iweb": "^1.0.1",
-    "@ibuild-community/react-native-draw": "^1.0.0",
     "@ibuild-community/simple-chart": "^1.0.1",
     "@react-native-pure/async-storage-extra": "^2",
-    "@react-native-pure/gallery": "^1.0.1",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
     "@react-native-pure/toast": "^2.0.0",
