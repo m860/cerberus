@@ -345,9 +345,10 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             VictoryNative: require("victory-native"),
             Button: {
                 default: require("./button/Button").default,
-                // ...require("./button/ButtonStyle")
+                // ...require("./button/ButtonStyle"
             },
             TabView: require("react-native-tab-view"),
+            IBuildModal:require("@react-native-pure/ibuild-modal"),
             ...exportModules(rest)
         }
     ];
