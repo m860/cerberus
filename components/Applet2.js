@@ -76,7 +76,7 @@ function downloadDebugApplet(
 
 export function downloadApplet(
     option: AppletOption,
-    rootDir:string = DefaultAppletRootDir,
+    rootDir: string = DefaultAppletRootDir,
     downloadProgress?: (received: number, total: number)=>any,
     downloadSuccess?: (code: string)=>any,
     downloadError?: (error: any)=>any
@@ -299,32 +299,36 @@ function Applet(props: Props) {
         //#region 加载小程序
         setStatus([AppletStatus.downloading, 0, 0]);
         let request = null;
-        if (!debug && hasCache(option, rootDir)) {
-            loadAppletFromCache();
-        } else {
-            const downloadHandler = debug ? downloadDebugApplet : downloadApplet;
-            request = downloadHandler(
-                option,
-                rootDir,
-                (received, total) => setStatus([AppletStatus.downloading, received, total]),
-                (code) => {
-                    setStatus([AppletStatus.downloadSuccess])
-                    // 编译
-                    const result = compile(code, option, exportModules, rootDir, navigation, (err) => {
-                        setStatus([AppletStatus.compileFail, err]);
-                    });
-                    if (result) {
-                        // setContent(result);
-                        // Content = result;
-                        content.current = result;
-                        setStatus([AppletStatus.rendering]);
-                    } else {
-                        setStatus([AppletStatus.compileFail, new Error("编译后的小程序为空")])
-                    }
-                },
-                (err) => setStatus([AppletStatus.error, err])
-            );
-        }
+        (async () => {
+            const isCached = await hasCache(option, rootDir);
+            if (!debug && isCached) {
+                loadAppletFromCache();
+            } else {
+                const downloadHandler = debug ? downloadDebugApplet : downloadApplet;
+                request = downloadHandler(
+                    option,
+                    rootDir,
+                    (received, total) => setStatus([AppletStatus.downloading, received, total]),
+                    (code) => {
+                        setStatus([AppletStatus.downloadSuccess])
+                        // 编译
+                        const result = compile(code, option, exportModules, rootDir, navigation, (err) => {
+                            setStatus([AppletStatus.compileFail, err]);
+                        });
+                        if (result) {
+                            // setContent(result);
+                            // Content = result;
+                            content.current = result;
+                            setStatus([AppletStatus.rendering]);
+                        } else {
+                            setStatus([AppletStatus.compileFail, new Error("编译后的小程序为空")])
+                        }
+                    },
+                    (err) => setStatus([AppletStatus.error, err])
+                );
+            }
+        })();
+
         //#endregion
 
         return () => {
