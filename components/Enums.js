@@ -41,5 +41,7 @@ export const AppletStatus = {
     //渲染失败
     renderFail: 10,
     //发生错误
-    error: 11
+    error: 11,
+    // debug时重新加载页面
+    reload: 12
 }
