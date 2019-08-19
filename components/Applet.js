@@ -42,6 +42,7 @@ type AppletRequire = (module: string) => any;
 
 function createAppletExecutable(code: string, scope = {}) {
     const scopeKeys = Object.keys(scope);
+    // $FlowFixMe
     const appletExecutable = new Function(...scopeKeys, code);
     return {
         exec(self: any) {
@@ -250,6 +251,7 @@ export default class Applet extends React.Component<Props, State> {
     async _loadAppletFromCache(): Promise<*> {
         const filename = getAppletEntryFile(this.props);
         try {
+            // $FlowFixMe
             const content = await RNFetchBlob.fs.readFile(filename, "utf8");
             return this._compile(content);
         } catch (ex) {
