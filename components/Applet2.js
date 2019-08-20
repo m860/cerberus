@@ -254,8 +254,6 @@ function Applet(props: Props) {
                     if (result) {
                         content.current = result;
                         setStatus([AppletStatus.rendering]);
-                    } else {
-                        setStatus([AppletStatus.compileFail, new Error("编译后的小程序为空")])
                     }
                 } else {
                     setStatus([AppletStatus.error, new Error(`缓存文件异常`)])
@@ -316,12 +314,8 @@ function Applet(props: Props) {
                             setStatus([AppletStatus.compileFail, err]);
                         });
                         if (result) {
-                            // setContent(result);
-                            // Content = result;
                             content.current = result;
                             setStatus([AppletStatus.rendering]);
-                        } else {
-                            setStatus([AppletStatus.compileFail, new Error("编译后的小程序为空")])
                         }
                     },
                     (err) => setStatus([AppletStatus.error, err])
@@ -348,8 +342,6 @@ function Applet(props: Props) {
             if (result) {
                 content.current = result;
                 setStatus([AppletStatus.rendering]);
-            } else {
-                setStatus([AppletStatus.compileFail, new Error("编译后的小程序为空")])
             }
         });
     };
