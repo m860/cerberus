@@ -299,21 +299,23 @@ export default class Applet extends React.Component<Props, State> {
                 }
             }).exec(this);
             const _createApplet = this._createApplet;
+            let error = null;
             //TODO 这个检查可以放在CLI中进行实现
-            if (_createApplet && typeof _createApplet === "function") {
+            if (_createApplet) {
                 if (_createApplet.metadata && _createApplet.metadata.buildType === "normal") {
                     this._component = _createApplet;
-                } else {
+                } else if (typeof _createApplet === "function") {
                     this._component = this._createApplet(...exportAllModules(this._appletOption));
+                } else {
+                    error = new Error("小程序入口必须导出一个函数或者组件(无效的导出)");
                 }
-                this.setState({
-                    status: AppletStatus.compileSuccess
-                });
             } else {
-                console.log(`小程序的入口必须是一个Function对象`);
+                error = new Error("小程序入口必须导出一个函数或者组件(没有任何导出)");
+            }
+            if (error) {
                 await this._setStateAsync({
                     status: AppletStatus.compileFail,
-                    error: new Error("小程序的入口必须是一个函数")
+                    error
                 });
             }
         } catch (ex) {

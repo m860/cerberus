@@ -190,7 +190,10 @@ export const exportCoreModules = (option: AppletOption) => {
             // AppRegistry: null,
             AppState: ReactNative.AppState,
             AsyncStorage: {
-                default: new AsyncStorageExtra(option.secretKey),
+                default: new AsyncStorageExtra({
+                    prefix: option.secretKey,
+                    preload: false
+                }),
                 storage: storage
             },
             // BackAndroid: ReactNative.BackAndroid,
