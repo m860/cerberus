@@ -58,7 +58,9 @@ export function openImagePicker(option: ImagePickerOption): Promise<Array<ImageP
                         }
 
                     })
-                    .catch(() => null);
+                    .catch((err) => {
+                        reject(err)
+                    });
             }
         })
     })
