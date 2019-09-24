@@ -80,7 +80,7 @@
     "@react-native-pure/async-storage-extra": "^2",
     "@react-native-pure/skeleton-view": "^1.0.2",
     "@react-native-pure/tag-selector": "^1.0.0",
-    "@react-native-pure/toast": "^2.0.0",
+    "@react-native-pure/toast": "^2.1.0",
     "fast-deep-equal": "^2.0.1",
     "hoist-non-react-statics": "^3.3.0",
     "memoize-one": "^5.0.0",

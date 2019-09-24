@@ -19,6 +19,7 @@ function getIconOption(option: ToastOption) {
 
 export default {
     show: ToastUtils.show,
+    alone: ToastUtils.alone,
     success: (option) => ToastUtils.show(option),
     fail: (option) => ToastUtils.show(option),
     warn: (option) => ToastUtils.show(option),
