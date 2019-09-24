@@ -311,13 +311,13 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             Svg: require("react-native-svg"),
             DeviceInfo: require("react-native-device-info").default,
             TagSelector: require("@react-native-pure/tag-selector").default,
-            BaiduMap: {
-                default: require("@ibuild-community/react-native-baidu-map").default,
-                getCurrentPosition: require("@ibuild-community/react-native-baidu-map").getCurrentPosition,
-                Overlay: require("@ibuild-community/react-native-baidu-map").Overlay,
-                TextMarker: require("@ibuild-community/react-native-baidu-map").TextMarker,
-                ImageMarker: mutateImageComponent(require("@ibuild-community/react-native-baidu-map").ImageMarker, option),
-            },
+            // BaiduMap: {
+            //     default: require("@ibuild-community/react-native-baidu-map").default,
+            //     getCurrentPosition: require("@ibuild-community/react-native-baidu-map").getCurrentPosition,
+            //     Overlay: require("@ibuild-community/react-native-baidu-map").Overlay,
+            //     TextMarker: require("@ibuild-community/react-native-baidu-map").TextMarker,
+            //     ImageMarker: mutateImageComponent(require("@ibuild-community/react-native-baidu-map").ImageMarker, option),
+            // },
             Utils: {
                 formatDate: require("dateformat"),
                 alert: alert,
