@@ -295,13 +295,13 @@ function Applet(props: Props) {
         });
 
         //#region 加载小程序
-        setStatus([AppletStatus.downloading, 0, 0]);
         let request = null;
         (async () => {
             const isCached = await hasCache(option, rootDir);
             if (!debug && isCached) {
                 loadAppletFromCache();
             } else {
+                setStatus([AppletStatus.downloading, 0, 0]);
                 const downloadHandler = debug ? downloadDebugApplet : downloadApplet;
                 request = downloadHandler(
                     option,
