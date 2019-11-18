@@ -13,19 +13,19 @@
 - √`Svg`在app中进行导出操作
 - √`DeviceInfo`在app中进行导出操作
 - √`TagSelector`在app中进行导出操作
-- `Utils`在app中进行导出操作
-- `Toast`在app中进行导出操作
-- `File`在app中进行导出操作
-- `Share`在app中进行导出操作
+- `Utils`在app中进行导出操作 
+- `Toast`在app中进行导出操作 
+- `File`在app中进行导出操作 
+- `Share`在app中进行导出操作 kk
 - √`Gallery`在app中进行导出操作
 - √`Camera`在app中进行导出操作
 - √移除`SimpleChart`
-- `ImageUtils`在app中进行导出操作
-- `Draw`在app中进行导出操作
-- `Calendar`在app中进行导出操作
+- `ImageUtils`在app中进行导出操作 kk
+- `Draw`在app中进行导出操作 kk
+- `Calendar`在app中进行导出操作 kk
 - √`WheelPicker`在app中进行导出操作
 - √移除`ViewShot`
-- `FlatListPaging`在app中进行导出操作
+- `FlatListPaging`在app中进行导出操作 kk
 - √`VictoryNative`在app中进行导出操作
 - √`TabView`在app中进行导出操作
 - √`IBuildModal`在app中进行导出操作

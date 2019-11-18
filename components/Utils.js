@@ -34,7 +34,7 @@ export function openImagePicker(option: ImagePickerOption): Promise<Array<ImageP
                 ImagePicker.openPicker(option)
                     .then(response => {
                         if (response) {
-                            if (response instanceof Array) {
+                            if (response instanceof  Array) {
                                 resolve(response.map(item => {
                                     return {
                                         path: item.path,
