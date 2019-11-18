@@ -1,6 +1,6 @@
 # 小程序轻量化重构
 
-- 迁移`Button`组件到app中并导出给小程序
+- √迁移`Button`组件到app中并导出给小程序
 - 迁移`SegmentControls`组件到app中并导出给小程序
 - √`PropTypes`在app中进行导出操作
 - √`Emitter`在app中进行导出操作
