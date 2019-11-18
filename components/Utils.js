@@ -321,7 +321,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             //     update: require("immutability-helper").default,
             //     openImagePicker: openImagePicker
             // },
-            Toast: require("./Toast").default,
+            // Toast: require("./Toast").default,
             File: createAppletFile(option),
             // Share: {
             //     shareToWeChatSceneSession: require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
