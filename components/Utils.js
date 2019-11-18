@@ -18,8 +18,6 @@ import {
 import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
 import createAppletFile from "./createAppletFile";
-import * as ImageUtils from '@ibuild-community/react-native-image-utils'
-import * as Draw from '@ibuild-community/react-native-draw'
 
 export function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
@@ -325,26 +323,26 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             },
             Toast: require("./Toast").default,
             File: createAppletFile(option),
-            Share: {
-                shareToWeChatSceneSession: require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
-                shareToWeChatSceneTimeline: require('@ibuild-community/react-native-share').shareToWeChatSceneTimeline,
-                openWX: require('@ibuild-community/react-native-share').openWX,
-                openSystemShare: require('@ibuild-community/react-native-share').openSystemShare
-            },
+            // Share: {
+            //     shareToWeChatSceneSession: require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
+            //     shareToWeChatSceneTimeline: require('@ibuild-community/react-native-share').shareToWeChatSceneTimeline,
+            //     openWX: require('@ibuild-community/react-native-share').openWX,
+            //     openSystemShare: require('@ibuild-community/react-native-share').openSystemShare
+            // },
             // Gallery: require('@react-native-pure/gallery').default,
             // Camera: require("@ibuild-community/react-native-camera").RNCamera,
             // SimpleChart: require("@ibuild-community/simple-chart"),
-            ImageUtils: ImageUtils,
-            Draw: Draw,
-            Calendar: {
-                default: require("react-native-calendars").Calendar,
-                CalendarList: require("react-native-calendars").CalendarList,
-                Agenda: require("react-native-calendars").Agenda,
-                LocaleConfig: require("react-native-calendars").LocaleConfig,
-            },
+            //ImageUtils: ImageUtils,
+           // Draw: Draw,
+           //  Calendar: {
+           //      default: require("react-native-calendars").Calendar,
+           //      CalendarList: require("react-native-calendars").CalendarList,
+           //      Agenda: require("react-native-calendars").Agenda,
+           //      LocaleConfig: require("react-native-calendars").LocaleConfig,
+           //  },
             // WheelPicker: require("@ibuild-community/react-native-wheel-picker").default,
             // ViewShot: require('@ibuild-community/react-native-view-shot'),
-            FlatListPaging: require("./FlatListPaging").default,
+           // FlatListPaging: require("./FlatListPaging").default,
             // VictoryNative: require("victory-native"),
             // Button: {
             //     default: require("./button/Button").default,

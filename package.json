@@ -70,7 +70,6 @@
     "fast-deep-equal": "^2.0.1",
     "hoist-non-react-statics": "^3.3.0",
     "memoize-one": "^5.0.0",
-    "react-native-calendars": "^1.30.0",
     "react-native-reanimated": "^1.0.1",
     "react-native-tab-view": "^2.5.0",
     "react-socket-io-client": "^1",
