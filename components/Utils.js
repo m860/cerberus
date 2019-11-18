@@ -290,7 +290,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
                     return createBottomTabNavigator(routeConfigMap, config);
                 },
                 createAppContainer: createAppContainer,
-                SegmentControls: require("./navigator/SegmentControls").default
+                // SegmentControls: require("./navigator/SegmentControls").default
             },
             // PropTypes: PropTypes,
             // Emitter: require("fbemitter"),
