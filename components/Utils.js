@@ -314,13 +314,13 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             //     TextMarker: require("@ibuild-community/react-native-baidu-map").TextMarker,
             //     ImageMarker: mutateImageComponent(require("@ibuild-community/react-native-baidu-map").ImageMarker, option),
             // },
-            Utils: {
-                formatDate: require("dateformat"),
-                alert: alert,
-                confirm: confirm,
-                update: require("immutability-helper").default,
-                openImagePicker: openImagePicker
-            },
+            // Utils: {
+            //     formatDate: require("dateformat"),
+            //     alert: alert,
+            //     confirm: confirm,
+            //     update: require("immutability-helper").default,
+            //     openImagePicker: openImagePicker
+            // },
             Toast: require("./Toast").default,
             File: createAppletFile(option),
             // Share: {
