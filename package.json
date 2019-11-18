@@ -49,10 +49,7 @@
     "rn-fetch-blob": "*",
     "fbemitter": "^2",
     "react-navigation": ">=3",
-    "react-native-zip-archive": ">=3",
-    "@ibuild-community/react-native-share": ">=1",
-    "@ibuild-community/react-native-image-utils": ">=1",
-    "@ibuild-community/react-native-draw": ">=1"
+    "react-native-zip-archive": ">=3"
   },
   "config": {
     "commitizen": {
