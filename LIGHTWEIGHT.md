@@ -15,7 +15,7 @@
 - √`TagSelector`在app中进行导出操作
 - √`Utils`在app中进行导出操作 
 - √`Toast`在app中进行导出操作 
-- `File`在app中进行导出操作 
+- √`File`在app中进行导出操作 
 - √`Share`在app中进行导出操作 kk
 - √`Gallery`在app中进行导出操作
 - √`Camera`在app中进行导出操作

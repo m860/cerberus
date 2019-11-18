@@ -3,9 +3,8 @@
  * @author jean.h.ma
  */
 import RNFetchBlob from "rn-fetch-blob"
-import type {AppletFile, AppletFileDownloadOption, AppletFileUploadOption, AppletOption} from "./Types";
 
-export default function createAppletFile(option: AppletOption & { rootDir: string }): AppletFile {
+export default function createAppletFile(option): AppletFile {
     const cachePath = option.rootDir;
     return {
         rm: (path: string) => {
@@ -36,3 +35,24 @@ export default function createAppletFile(option: AppletOption & { rootDir: strin
         },
     };
 }
+
+export type AppletFileDownloadOption = {
+    url: string,
+    fileName: string,
+    headers?: Object,
+};
+
+export type AppletFileUploadOption = {
+    url: string,
+    headers?: Object,
+    buildData: (wrap: Function) => mixed
+};
+
+export type AppletFile = {
+    rm: () => Promise,
+    download: (option: AppletFileDownloadOption) => Promise<mixed>,
+    upload: (option: AppletFileUploadOption) => Promise<mixed>,
+    exists: (path: string) => Promise<Boolean>,
+    mkdir: (path: string) => Promise,
+    getAbsolutePath: (path: string) => string
+};

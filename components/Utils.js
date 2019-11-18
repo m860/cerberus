@@ -17,7 +17,6 @@ import {
 } from "react-navigation"
 import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
-import createAppletFile from "./createAppletFile";
 
 export function openImagePicker(option: ImagePickerOption): Promise<Array<ImagePickerResult> | ImagePickerResult | null> {
     return new Promise((resolve, reject) => {
@@ -322,7 +321,7 @@ export const exportAllModules = memoizeOne((option: AppletOption & { exportModul
             //     openImagePicker: openImagePicker
             // },
             // Toast: require("./Toast").default,
-            File: createAppletFile(option),
+            // File: createAppletFile(option),
             // Share: {
             //     shareToWeChatSceneSession: require('@ibuild-community/react-native-share').shareToWeChatSceneSession,
             //     shareToWeChatSceneTimeline: require('@ibuild-community/react-native-share').shareToWeChatSceneTimeline,

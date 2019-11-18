@@ -55,23 +55,5 @@ export type ToastOption = Object & {
     }
 }
 
-export type AppletFileDownloadOption = {
-    url: string,
-    fileName: string,
-    headers?: Object,
-};
 
-export type AppletFileUploadOption = {
-    url: string,
-    headers?: Object,
-    buildData: (wrap: Function) => mixed
-};
 
-export type AppletFile = {
-    rm: () => Promise,
-    download: (option: AppletFileDownloadOption) => Promise<mixed>,
-    upload: (option: AppletFileUploadOption) => Promise<mixed>,
-    exists: (path: string) => Promise<Boolean>,
-    mkdir: (path: string) => Promise,
-    getAbsolutePath: (path: string) => string
-};
