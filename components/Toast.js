@@ -1,8 +1,6 @@
 import * as React from "react"
 import ToastUtils from "@react-native-pure/toast"
-import Icon from "react-native-vector-icons/FontAwesome"
 import type {ToastOption} from "./Types";
-import {View, Text} from "react-native"
 
 function getIconOption(option: ToastOption) {
     let iconProps = {};

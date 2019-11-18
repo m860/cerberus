@@ -9,14 +9,12 @@ import Import from "./Import";
 import AsyncStorageExtra, {storage} from "@react-native-pure/async-storage-extra"
 import {
     createAppContainer,
+    createBottomTabNavigator,
     createMaterialTopTabNavigator,
     createStackNavigator,
-    withNavigation,
     HeaderBackButton,
-    createBottomTabNavigator
+    withNavigation
 } from "react-navigation"
-import PropTypes from "prop-types"
-import axios from "axios"
 import Permissions from "react-native-permissions";
 import ImagePicker from "react-native-image-crop-picker"
 import createAppletFile from "./createAppletFile";
