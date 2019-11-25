@@ -16,35 +16,16 @@
   "license": "MIT",
   "devDependencies": {
     "@semantic-release/gitlab": "^3.1.2",
-    "axios": "^0.18.0",
     "commitizen": "^3.0.7",
     "cz-conventional-changelog": "^2.1.0",
-    "dateformat": "^3.0.3",
-    "fbemitter": "^2.1.1",
     "flow-bin": "^0.92.0",
-    "immutability-helper": "^3.0.0",
-    "prop-types": "^15.7.2",
     "react": "16.8.3",
     "react-native": "0.59.1",
-    "react-native-datepicker": "^1.7.2",
-    "react-native-device-info": "^1.1.0",
-    "react-native-image-crop-picker": "^0.23.1",
-    "react-native-permissions": "^1.1.1",
-    "react-native-render-html": "^3.10.0",
-    "react-native-svg": "^8.0.10",
-    "react-native-vector-icons": "^6.4.2",
-    "react-native-zip-archive": "^3.0.1",
-    "react-navigation": "^3.3.2",
-    "rn-fetch-blob": "^0.10.15",
-    "semantic-release": "^15.13.3",
-    "uuid": "^3.3.2"
+    "semantic-release": "^15.13.3"
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-native": ">=0.50",
-    "rn-fetch-blob": "*",
-    "fbemitter": "^2",
-    "react-native-zip-archive": ">=3"
+    "react-native": ">=0.50"
   },
   "config": {
     "commitizen": {
