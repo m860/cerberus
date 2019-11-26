@@ -1,19 +1,23 @@
 {
-  "name": "cerberus",
+  "name": "@m860/cerberus",
   "version": "0.0.1",
   "description": "react-native小程序",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "cm": "git-cz",
-    "publish": "export GL_TOKEN=XL3QKsmZTTqYhjg2yWxJ && semantic-release && git checkout package.json"
+    "publish": "semantic-release && git checkout package.json"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:m860/cerberus.git"
+    "url": "git+https://github.com/m860/cerberus.git"
   },
   "author": "m860",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/m860/cerberus/issues"
+  },
+  "homepage": "https://github.com/m860/cerberus#readme",
   "devDependencies": {
     "@semantic-release/gitlab": "^3.1.2",
     "commitizen": "^3.0.7",
@@ -33,8 +37,7 @@
     }
   },
   "dependencies": {
-    "react-socket-io-client": "^1",
-    "socket.io-client": "^2.2.0"
+
   },
   "publishConfig": {
     "access": "public"

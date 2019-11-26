@@ -1,19 +1,10 @@
 {
-  "ci": false,
-  "plugins": [
-    ["@semantic-release/commit-analyzer", {
-      "releaseRules": [
-        {"type": "refactor", "release": "patch"},
-      ]
-    }],
-    "@semantic-release/release-notes-generator",
-    [
-      "@semantic-release/gitlab",
-      {
-        "gitlabUrl": "http://cmisgitlab01",
-        "gitlabApiPathPrefix": "/api/v4"
-      }
-    ],
-    "@semantic-release/npm"
-  ]
+    "ci":false,
+    "dryRun":false,
+    "plugins":[
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/release-notes-generator",
+        "@semantic-release/github",
+        "@semantic-release/npm"
+    ]
 }
