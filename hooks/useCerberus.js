@@ -56,6 +56,10 @@ export function useCerberus(option: CerberusOption): CerberusResult {
     } = option;
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare});
+    const baseURL: string = React.useMemo(() => {
+        const index = entry.lastIndexOf("/");
+        return entry.substring(0, index + 1);
+    }, [entry]);
 
     const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error = null) => {
         status.current.status = s;
@@ -86,7 +90,8 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         if (code) {
             try {
                 result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `return ${code}`))(React, ReactNative, {
-                    ...injectModules()
+                    ...injectModules(),
+                    __BASE_URL__: baseURL
                 });
                 setStatus(CerberusStatusCode.success);
             } catch (ex) {
