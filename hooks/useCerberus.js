@@ -51,7 +51,8 @@ export type CerberusResult = [CerberusState, any];
 export function useCerberus(option: CerberusOption): CerberusResult {
     const {
         entry,
-        injectModules,
+        injectModules = () => {
+        },
         defaultCode = null
     } = option;
     const [code, setCode] = React.useState<?string>(defaultCode);
