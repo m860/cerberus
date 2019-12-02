@@ -9,6 +9,10 @@
 
 import * as React from "react"
 import * as ReactNative from "react-native"
+import io from "socket.io-client"
+import type {Manager, Socket} from "socket.io-client"
+
+const KEY_WEBPACK_COMPILE_SUCCESS = "WEBPACK_COMPILE_SUCCESS";
 
 /**
  * 状态
@@ -44,7 +48,11 @@ export type CerberusOption = {
     /**
      * 默认需要执行的代码
      */
-    defaultCode?: string
+    defaultCode?: string,
+    /**
+     * 是否开起debug模式,默认值：false
+     */
+    debug?: boolean
 };
 
 export type CerberusResult = [CerberusState, any];
@@ -54,7 +62,8 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         entry,
         injectModules = () => {
         },
-        defaultCode = null
+        defaultCode = null,
+        debug = false
     } = option;
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare});
@@ -62,6 +71,7 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         const index = entry.lastIndexOf("/");
         return entry.substring(0, index + 1);
     }, [entry]);
+    const [lastUpdateDate, setLastUpdateDate] = React.useState<number>(Date.now());
 
     const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error = null) => {
         status.current.status = s;
@@ -85,7 +95,7 @@ export function useCerberus(option: CerberusOption): CerberusResult {
                     setStatus(CerberusStatusCode.error, ex);
                 })
         }
-    }, [entry]);
+    }, [entry, lastUpdateDate]);
 
     const defined = React.useMemo<any>(() => {
         let result = null;
@@ -102,6 +112,26 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         }
         return result;
     }, [code]);
+
+    React.useEffect(() => {
+        let socket: ?Socket = null;
+        const webpackCompileSuccess = () => {
+            setLastUpdateDate(Date.now());
+        }
+        if (debug) {
+            socket = io(baseURL);
+            socket.on(KEY_WEBPACK_COMPILE_SUCCESS, webpackCompileSuccess)
+        }
+        return () => {
+            if (socket) {
+                socket.off(KEY_WEBPACK_COMPILE_SUCCESS, webpackCompileSuccess);
+                if (socket.connected) {
+                    socket.close()
+                }
+                socket.destroy();
+            }
+        }
+    }, [debug]);
 
     return [status, defined]
 }
