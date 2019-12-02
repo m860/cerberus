@@ -19,15 +19,15 @@ const KEY_WEBPACK_COMPILE_SUCCESS = "WEBPACK_COMPILE_SUCCESS";
  */
 export const CerberusStatusCode = {
     // 准备
-    prepare: 0,
+    prepare: "prepare",
     // 下载中
-    downloading: 10,
+    downloading: "downloading",
     // 编译中
-    compiling: 20,
+    compiling: "compiling",
     // 错误
-    error: 90,
+    error: "error",
     // 成功
-    success: 100
+    success: "success"
 };
 
 export type CerberusState = {
