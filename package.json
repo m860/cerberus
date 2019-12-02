@@ -4,7 +4,6 @@
   "description": "react-native小程序",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
     "cm": "git-cz",
     "publish": "semantic-release && git checkout package.json"
   },
