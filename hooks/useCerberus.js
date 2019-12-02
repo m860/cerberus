@@ -9,10 +9,7 @@
 
 import * as React from "react"
 import * as ReactNative from "react-native"
-import io from "socket.io-client"
-import type {Manager, Socket} from "socket.io-client"
-
-const KEY_WEBPACK_COMPILE_SUCCESS = "WEBPACK_COMPILE_SUCCESS";
+import {useDebug} from "./useDebug";
 
 /**
  * 状态
@@ -71,7 +68,7 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         const index = entry.lastIndexOf("/");
         return entry.substring(0, index + 1);
     }, [entry]);
-    const [lastUpdateDate, setLastUpdateDate] = React.useState<number>(Date.now());
+    const lastUpdateDate = useDebug(debug, baseURL);
 
     const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error = null) => {
         status.current.status = s;
@@ -112,26 +109,6 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         }
         return result;
     }, [code]);
-
-    React.useEffect(() => {
-        let socket: ?Socket = null;
-        const webpackCompileSuccess = () => {
-            setLastUpdateDate(Date.now());
-        }
-        if (debug) {
-            socket = io(baseURL);
-            socket.on(KEY_WEBPACK_COMPILE_SUCCESS, webpackCompileSuccess)
-        }
-        return () => {
-            if (socket) {
-                socket.off(KEY_WEBPACK_COMPILE_SUCCESS, webpackCompileSuccess);
-                if (socket.connected) {
-                    socket.close()
-                }
-                socket.destroy();
-            }
-        }
-    }, [debug]);
 
     return [status, defined]
 }
