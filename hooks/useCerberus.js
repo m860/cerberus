@@ -78,7 +78,6 @@ export function useCerberus(option: CerberusOption): CerberusResult {
     React.useEffect(() => {
         if (entry) {
             setStatus(CerberusStatusCode.downloading);
-            status.current.status = CerberusStatusCode.downloading;
             const url = typeof entry === "string" ? entry : entry.url;
             const option = typeof entry === "string" ? null : entry.option;
             fetch(url, option)
@@ -86,6 +85,9 @@ export function useCerberus(option: CerberusOption): CerberusResult {
                 .then(text => {
                     if (code !== text) {
                         setCode(text);
+                    } else {
+                        // 如果代码没有变化，则将状态修改为success
+                        setStatus(CerberusStatusCode.success);
                     }
                 })
                 .catch(ex => {
