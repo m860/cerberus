@@ -19,7 +19,7 @@ react-native微应用/微组件纯JS解决方案
 - 启动本地服务
     
     ```bash
-    $ npx cbs cbs.json
+    $ npx cbs start cbs.json
     ```
     
 - 安装`cerberus`
