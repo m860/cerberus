@@ -70,7 +70,7 @@ export function useCerberus(option: CerberusOption): CerberusResult {
     }, [entry]);
     const lastUpdateDate = useDebug(debug, baseURL);
 
-    const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error = null) => {
+    const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error) => {
         status.current.status = s;
         status.current.error = ex;
     }, []);
