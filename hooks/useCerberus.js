@@ -65,12 +65,15 @@ export function useCerberus(option: CerberusOption): CerberusResult {
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare});
     const baseURL: string = React.useMemo(() => {
-        const index = entry.lastIndexOf("/");
-        return entry.substring(0, index + 1);
+        if (entry) {
+            const index = entry.lastIndexOf("/");
+            return entry.substring(0, index + 1);
+        }
+        return "";
     }, [entry]);
     const lastUpdateDate = useDebug(debug, baseURL);
 
-    const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error = null) => {
+    const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error) => {
         status.current.status = s;
         status.current.error = ex;
     }, []);
@@ -100,7 +103,8 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         let result = null;
         if (code) {
             try {
-                result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `return ${code}`))(React, ReactNative, {
+
+                result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `${code} return __exps__`))(React, ReactNative, {
                     ...injectModules(),
                     __BASE_URL__: baseURL
                 });
@@ -112,5 +116,5 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         return result;
     }, [code]);
 
-    return [status, defined]
+    return [status, defined,setStatus]
 }
