@@ -65,8 +65,11 @@ export function useCerberus(option: CerberusOption): CerberusResult {
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare});
     const baseURL: string = React.useMemo(() => {
-        const index = entry.lastIndexOf("/");
-        return entry.substring(0, index + 1);
+        if (entry) {
+            const index = entry.lastIndexOf("/");
+            return entry.substring(0, index + 1);
+        }
+        return "";
     }, [entry]);
     const lastUpdateDate = useDebug(debug, baseURL);
 
@@ -113,5 +116,5 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         return result;
     }, [code]);
 
-    return [status, defined]
+    return [status, defined,setStatus]
 }

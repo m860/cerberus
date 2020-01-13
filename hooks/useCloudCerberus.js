@@ -2,6 +2,7 @@
  * @flow
  * @author Jean.h.ma 2020/1/7
  */
+import * as React from "react"
 import type {CerberusOption, CerberusResult, CerberusState} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
 import client from "../client"
@@ -23,9 +24,14 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
         status: CerberusStatusCode.prepare,
         error: null
     });
+    const [status, defined, setStatus] = useCerberus({
+        ...rest,
+        entry,
+        debug: false
+    });
 
     React.useEffect(() => {
-        //TODO get entry with secret
+        // get entry with secret
         client.query({
             query: gql`
                 query bundle($secret:String!){
@@ -33,23 +39,16 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
                         entry
                     }
                 }
-            `
+            `,
+            variables: {
+                secret
+            }
         }).then(({data: {bundle}}) => {
             setEntry(bundle.entry);
         }).catch(ex => {
-            cerberusState.current = {
-                status: CerberusStatusCode.error,
-                error: ex
-            }
+            setStatus(CerberusStatusCode.error, ex);
         })
     }, [secret]);
 
-    if (!entry) {
-        return [cerberusState.current, null];
-    }
-    return useCerberus({
-        ...rest,
-        entry,
-        debug: false
-    })
+    return [status, defined, setStatus];
 }
