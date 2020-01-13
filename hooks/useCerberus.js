@@ -100,7 +100,8 @@ export function useCerberus(option: CerberusOption): CerberusResult {
         let result = null;
         if (code) {
             try {
-                result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `return ${code}`))(React, ReactNative, {
+
+                result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `${code} return __exps__`))(React, ReactNative, {
                     ...injectModules(),
                     __BASE_URL__: baseURL
                 });
