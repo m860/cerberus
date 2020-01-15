@@ -8,7 +8,7 @@ import {CerberusStatusCode, useCerberus} from "./useCerberus";
 import client from "../client"
 import gql from "graphql-tag"
 
-export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any |}> & {
+export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
     secret: string
 }
 

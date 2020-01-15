@@ -10,6 +10,8 @@
 import * as React from "react"
 import * as ReactNative from "react-native"
 import {useDebug} from "./useDebug";
+import {memoryCache} from "../libs/CerberusMemoryCache";
+import type {ICerberusCache} from "../libs/CerberusMemoryCache";
 
 /**
  * 状态
@@ -32,25 +34,6 @@ export type CerberusState = {
     error: ?Error
 };
 
-export interface ICerberusCache {
-    get(hash: string): Promise<string | null>;
-
-    set(hash: string, code: string): Promise<boolean>;
-};
-
-export class CerberusMemoryCache implements ICerberusCache {
-    _caches = {};
-
-    set(hash: string, code: string): Promise<boolean> {
-        this._caches[hash] = code;
-        return Promise.resolve(true);
-    }
-
-    get(hash: string): Promise<string | null> {
-        return Promise.resolve(this._caches[hash]);
-    }
-}
-
 export type CerberusOption = {
     /**
      * 入口文件，例如:http://DOMAIN/main.js
@@ -62,7 +45,7 @@ export type CerberusOption = {
      */
     hash: ?string,
     /**
-     * 缓存，默认使用内存缓存，用户可以自己实现缓存策略，如果hash为null或者debug=true缓存将不会生效
+     * 缓存实例，需要实现`ICerberusCache`接口，默认使用内存缓存，用户可以自己实现缓存策略，如果hash为null或者debug=true缓存将不会生效
      */
     cacheDriver?: ?ICerberusCache,
     /**
@@ -93,7 +76,7 @@ export function useCerberus(props: CerberusOption): CerberusResult {
         defaultCode = null,
         debug = false,
         hash,
-        cacheDriver = new CerberusMemoryCache()
+        cacheDriver = memoryCache
     } = props;
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare, error: null});
@@ -138,7 +121,7 @@ export function useCerberus(props: CerberusOption): CerberusResult {
                 const option = typeof entry === "string" ? null : entry.option;
                 try {
                     const res = await fetch(url, option);
-                    const text = res.text();
+                    const text = await res.text();
                     if (code !== text) {
                         setCode(text);
                         if (hash && cacheDriver) {
