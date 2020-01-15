@@ -40,7 +40,8 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
             `,
             variables: {
                 secret
-            }
+            },
+            fetchPolicy: 'network-only'
         }).then(({data: {bundle}}) => {
             setBundle(bundle);
         }).catch(ex => {
