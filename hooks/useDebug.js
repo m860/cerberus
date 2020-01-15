@@ -24,9 +24,11 @@ export function useDebug(debug: boolean, url: string): number {
         return () => {
             if (socket) {
                 socket.off(KEY_WEBPACK_COMPILE_SUCCESS, webpackCompileSuccess);
+                // $FlowFixMe
                 if (socket.connected) {
                     socket.close()
                 }
+                // $FlowFixMe
                 socket.destroy();
             }
         }

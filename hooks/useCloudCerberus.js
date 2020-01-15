@@ -19,15 +19,16 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
     } = props;
 
 
-    const [entry, setEntry] = React.useState(null);
-    const cerberusState = React.useRef<CerberusState>({
-        status: CerberusStatusCode.prepare,
-        error: null
-    });
+    const [bundle, setBundle] = React.useState<{| entry: ?string, hash: ?string |}>({entry: null, hash: null});
+    // const cerberusState = React.useRef<CerberusState>({
+    //     status: CerberusStatusCode.prepare,
+    //     error: null
+    // });
     const [status, defined, setStatus] = useCerberus({
         ...rest,
-        entry,
-        debug: false
+        entry: bundle.entry,
+        debug: false,
+        hash: bundle.hash
     });
 
     React.useEffect(() => {
@@ -36,7 +37,8 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
             query: gql`
                 query bundle($secret:String!){
                     bundle(secret:$secret){
-                        entry
+                        entry,
+                        hash
                     }
                 }
             `,
@@ -44,7 +46,7 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
                 secret
             }
         }).then(({data: {bundle}}) => {
-            setEntry(bundle.entry);
+            setBundle(bundle);
         }).catch(ex => {
             setStatus(CerberusStatusCode.error, ex);
         })
