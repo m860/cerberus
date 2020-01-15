@@ -6,7 +6,7 @@ import * as React from "react"
 import type {CerberusOption, CerberusResult} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
 import client from "../libs/client"
-import gql from "graphql-tag"
+import {gql} from "apollo-boost"
 
 export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
     secret: string
