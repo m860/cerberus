@@ -9,7 +9,7 @@ import client from "../libs/client"
 import {gql} from "apollo-boost"
 
 export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
-    secret: string
+    secret: ?string
 }
 
 export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
@@ -28,25 +28,27 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
     });
 
     React.useEffect(() => {
-        // get entry with secret
-        client.query({
-            query: gql`
-                query bundle($secret:String!){
-                    bundle(secret:$secret){
-                        entry,
-                        hash
+        if (secret) {
+            // get entry with secret
+            client.query({
+                query: gql`
+                    query bundle($secret:String!){
+                        bundle(secret:$secret){
+                            entry,
+                            hash
+                        }
                     }
-                }
-            `,
-            variables: {
-                secret
-            },
-            fetchPolicy: 'network-only'
-        }).then(({data: {bundle}}) => {
-            setBundle(bundle);
-        }).catch(ex => {
-            setStatus(CerberusStatusCode.error, ex);
-        })
+                `,
+                variables: {
+                    secret
+                },
+                fetchPolicy: 'network-only'
+            }).then(({data: {bundle}}) => {
+                setBundle(bundle);
+            }).catch(ex => {
+                setStatus(CerberusStatusCode.error, ex);
+            });
+        }
     }, [secret]);
 
     return [status, defined, setStatus];
