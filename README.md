@@ -125,12 +125,3 @@ type ConfigOption={
     ```jsx harmony
     <Image source={require("image.png")} style={{width:100,height:100}}/>
     ```
-
-<!--
-## TODO
-
-- [ ] 实现reload
-- [ ] 实现`Cerberus`组件
-- [ ] 完善文档
-- [ ] 博文：cerberus原理解析
--->
