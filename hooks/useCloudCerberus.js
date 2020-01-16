@@ -3,51 +3,65 @@
  * @author Jean.h.ma 2020/1/7
  */
 import * as React from "react"
-import type {CerberusOption, CerberusResult, CerberusState} from "./useCerberus";
+import type {CerberusOption, CerberusResult} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
-import client from "../client"
-import gql from "graphql-tag"
+import client from "../libs/client"
+import {gql} from "apollo-boost"
 
-export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any |}> & {
-    secret: string
+export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
+    secret: ?string,
+    /**
+     * 查询需要使用的entry，默认情况返回第一个entry
+     */
+    queryEntry?: (entries: Array<string>)=>string | null
 }
 
 export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
     const {
         secret,
+        queryEntry = (entries: Array<string>): string | null => {
+            if (entries && entries.length > 0) {
+                return entries[0];
+            }
+            return null;
+        },
         ...rest
     } = props;
 
 
-    const [entry, setEntry] = React.useState(null);
-    const cerberusState = React.useRef<CerberusState>({
-        status: CerberusStatusCode.prepare,
-        error: null
+    const [bundle, setBundle] = React.useState<{| entry: Array<string> | null, hash: ?string |}>({
+        entry: null,
+        hash: null
     });
     const [status, defined, setStatus] = useCerberus({
         ...rest,
-        entry,
-        debug: false
+        entry: queryEntry(bundle && bundle.entry ? bundle.entry : []),
+        debug: false,
+        hash: bundle.hash
     });
 
     React.useEffect(() => {
-        // get entry with secret
-        client.query({
-            query: gql`
-                query bundle($secret:String!){
-                    bundle(secret:$secret){
-                        entry
+        if (secret) {
+            // get entry with secret
+            client.query({
+                query: gql`
+                    query bundle($secret:String!){
+                        bundle(secret:$secret){
+                            entry,
+                            hash
+                        }
                     }
-                }
-            `,
-            variables: {
-                secret
-            }
-        }).then(({data: {bundle}}) => {
-            setEntry(bundle.entry);
-        }).catch(ex => {
-            setStatus(CerberusStatusCode.error, ex);
-        })
+                `,
+                variables: {
+                    secret
+                },
+                fetchPolicy: 'network-only'
+            }).then(({data: {bundle}}) => {
+                setBundle(bundle);
+            }).catch(ex => {
+                setStatus(CerberusStatusCode.error, ex);
+            });
+        }
     }, [secret]);
 
     return [status, defined, setStatus];
