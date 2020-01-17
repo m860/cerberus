@@ -37,11 +37,16 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
         entry: null,
         hash: null
     });
+
+    const url: ?string = React.useMemo(() => {
+        return queryEntry(bundle && bundle.entry ? bundle.entry : []);
+    }, [bundle])
+
     const [status, defined, setStatus] = useCerberus({
         ...rest,
-        entry: queryEntry(bundle && bundle.entry ? bundle.entry : []),
+        entry: url,
         debug: false,
-        hash: bundle.hash
+        hash: bundle.hash && url ? bundle.hash + url : null
     });
 
     React.useEffect(() => {

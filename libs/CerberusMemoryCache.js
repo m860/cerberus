@@ -52,7 +52,7 @@ export async function preloadCloud(option: PreloadOption): Promise<?Error> {
             const url: ?string = queryEntry(entry);
             if (url) {
                 const code = await downloadCode(url);
-                await cache.set(hash, code);
+                await cache.set(hash + url, code);
             }
         }
         return null;
