@@ -46,13 +46,12 @@ export async function preloadCloud(option: PreloadOption): Promise<?Error> {
     } = option;
     try {
         const bundle: Bundle = await getBundle(secret);
-        const hash: ?string = bundle.hash;
         const entry: ?Array<string> = bundle.entry;
-        if (hash && entry) {
+        if (entry) {
             const url: ?string = queryEntry(entry);
             if (url) {
                 const code = await downloadCode(url);
-                await cache.set(hash + url, code);
+                await cache.set(url, code);
             }
         }
         return null;
