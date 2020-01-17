@@ -12,6 +12,7 @@ import * as ReactNative from "react-native"
 import {useDebug} from "./useDebug";
 import {memoryCache} from "../libs/CerberusMemoryCache";
 import type {ICerberusCache} from "../libs/CerberusMemoryCache";
+import {downloadCode} from "../libs/utils";
 
 /**
  * 状态
@@ -34,12 +35,13 @@ export type CerberusState = {
     error: ?Error
 };
 
+export type CerberusEntry = ?string | ?{ url: string, option?: Object };
+
 export type CerberusOption = {
     /**
      * 入口文件，例如:http://DOMAIN/main.js
      */
-    entry: ?string
-        | ?{ url: string, option?: Object },
+    entry: CerberusEntry,
     /**
      * 全局唯一，建议使用content hash
      */
@@ -47,7 +49,7 @@ export type CerberusOption = {
     /**
      * 缓存实例，需要实现`ICerberusCache`接口，默认使用内存缓存，用户可以自己实现缓存策略，如果hash为null或者debug=true缓存将不会生效
      */
-    cacheDriver?: ?ICerberusCache,
+    cache?: ?ICerberusCache,
     /**
      * 需要注入到小程序的module
      */
@@ -76,7 +78,7 @@ export function useCerberus(props: CerberusOption): CerberusResult {
         defaultCode = null,
         debug = false,
         hash,
-        cacheDriver = memoryCache
+        cache = memoryCache
     } = props;
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare, error: null});
@@ -106,8 +108,8 @@ export function useCerberus(props: CerberusOption): CerberusResult {
 
     React.useEffect(() => {
         (async () => {
-            if (!debug && hash && cacheDriver) {
-                const cacheCode: ?string = await cacheDriver.get(hash);
+            if (!debug && hash && cache) {
+                const cacheCode: ?string = await cache.get(hash);
                 if (cacheCode) {
                     if (code !== cacheCode) {
                         setCode(cacheCode);
@@ -117,15 +119,12 @@ export function useCerberus(props: CerberusOption): CerberusResult {
             }
             if (entry) {
                 setStatus(CerberusStatusCode.downloading);
-                const url = typeof entry === "string" ? entry : entry.url;
-                const option = typeof entry === "string" ? null : entry.option;
                 try {
-                    const res = await fetch(url, option);
-                    const text = await res.text();
+                    const text = await downloadCode(entry);
                     if (code !== text) {
                         setCode(text);
-                        if (hash && cacheDriver) {
-                            await cacheDriver.set(hash, text);
+                        if (hash && cache) {
+                            await cache.set(hash, text);
                         }
                     } else {
                         // 如果代码没有变化，则将状态修改为success

@@ -5,31 +5,35 @@
 import * as React from "react"
 import type {CerberusOption, CerberusResult} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
-import client from "../libs/client"
-import {gql} from "apollo-boost"
+import {getBundle} from "../libs/services"
+import type {Bundle} from "../libs/services";
+
+export type QueryEntry = (entries: Array<string>)=>string | null;
+
+export const DefaultQueryEntry = (entries: Array<string>): string | null => {
+    if (entries && entries.length > 0) {
+        return entries[0];
+    }
+    return null;
+};
 
 export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
     secret: ?string,
     /**
      * 查询需要使用的entry，默认情况返回第一个entry
      */
-    queryEntry?: (entries: Array<string>)=>string | null
+    queryEntry?: QueryEntry
 }
 
 export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
     const {
         secret,
-        queryEntry = (entries: Array<string>): string | null => {
-            if (entries && entries.length > 0) {
-                return entries[0];
-            }
-            return null;
-        },
+        queryEntry = DefaultQueryEntry,
         ...rest
     } = props;
 
 
-    const [bundle, setBundle] = React.useState<{| entry: Array<string> | null, hash: ?string |}>({
+    const [bundle, setBundle] = React.useState<Bundle>({
         entry: null,
         hash: null
     });
@@ -42,25 +46,15 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
 
     React.useEffect(() => {
         if (secret) {
-            // get entry with secret
-            client.query({
-                query: gql`
-                    query bundle($secret:String!){
-                        bundle(secret:$secret){
-                            entry,
-                            hash
-                        }
-                    }
-                `,
-                variables: {
-                    secret
-                },
-                fetchPolicy: 'network-only'
-            }).then(({data: {bundle}}) => {
-                setBundle(bundle);
-            }).catch(ex => {
+            getBundle(secret)
+                .then((bundle: Bundle) => {
+                    setBundle(bundle);
+                }).catch(ex => {
                 setStatus(CerberusStatusCode.error, ex);
             });
+        }
+        return () => {
+            //TODO abort fetch
         }
     }, [secret]);
 

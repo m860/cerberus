@@ -1,3 +1,4 @@
 export * from "./hooks/useCerberus"
 export * from "./hooks/useCloudCerberus"
-export {ICerberusCache} from "./libs/CerberusMemoryCache"
+export type {ICerberusCache, PreloadOption} from "./libs/CerberusMemoryCache"
+export {preloadCloud} from "./libs/CerberusMemoryCache"
