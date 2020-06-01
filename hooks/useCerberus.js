@@ -10,9 +10,9 @@
 import * as React from "react"
 import * as ReactNative from "react-native"
 import {useDebug} from "./useDebug";
-import {memoryCache} from "../libs/CerberusMemoryCache";
 import type {ICerberusCache} from "../libs/CerberusMemoryCache";
-import {downloadCode} from "../libs/utils";
+import {memoryCache} from "../libs/CerberusMemoryCache";
+import useUtils from "./useUtils";
 
 /**
  * 状态
@@ -80,6 +80,7 @@ export function useCerberus(props: CerberusOption): CerberusResult {
         hash,
         cache = memoryCache
     } = props;
+    const {download} = useUtils();
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare, error: null});
     const baseURL: string = React.useMemo(() => {
@@ -120,7 +121,7 @@ export function useCerberus(props: CerberusOption): CerberusResult {
             if (entry) {
                 setStatus(CerberusStatusCode.downloading);
                 try {
-                    const text = await downloadCode(entry);
+                    const text = await download(entry);
                     if (code !== text) {
                         setCode(text);
                         if (hash && cache) {
