@@ -31,7 +31,7 @@ export const CerberusStatusCode = {
 };
 
 export type CerberusState = {
-    status: $Values<typeof CerberusStatusCode>,
+    status: $Keys<typeof CerberusStatusCode>,
     error: ?Error
 };
 
@@ -51,7 +51,7 @@ export type CerberusOption = {
      */
     cache?: ?ICerberusCache,
     /**
-     * 需要注入到小程序的module
+     * 需要注入到小程序的module（自定义modules）
      */
     injectModules?: ()=>Object,
     /**
@@ -65,6 +65,7 @@ export type CerberusOption = {
 };
 
 export type CerberusResult = [
+    // 当前cerberus状态
     { current: CerberusState | null },
     any,
     Function
