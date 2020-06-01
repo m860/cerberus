@@ -10,9 +10,8 @@
 import * as React from "react"
 import * as ReactNative from "react-native"
 import {useDebug} from "./useDebug";
-import type {ICerberusCache} from "../libs/CerberusMemoryCache";
-import {memoryCache} from "../libs/CerberusMemoryCache";
 import useUtils from "./useUtils";
+import useCache from "./useCache";
 
 /**
  * 状态
@@ -47,7 +46,7 @@ export type CerberusOption = {
      */
     hash: ?string,
     /**
-     * 缓存实例，需要实现`ICerberusCache`接口，默认使用内存缓存，用户可以自己实现缓存策略，如果hash为null或者debug=true缓存将不会生效
+     * 缓存实例，需要实现`ICerberusCache`接口，默认使用存策内存缓存，用户可以自己实现缓略，如果hash为null或者debug=true缓存将不会生效
      */
     cache?: ?ICerberusCache,
     /**
@@ -79,8 +78,10 @@ export function useCerberus(props: CerberusOption): CerberusResult {
         defaultCode = null,
         debug = false,
         hash,
-        cache = memoryCache
+        cache: providerCache
     } = props;
+    // cache instance
+    const {cache} = useCache(providerCache);
     const {download} = useUtils();
     const [code, setCode] = React.useState<?string>(defaultCode);
     const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare, error: null});

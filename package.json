@@ -30,7 +30,8 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-native": ">=0.50"
+    "react-native": ">=0.50",
+    "@react-native-community/async-storage": "^1.11.0"
   },
   "config": {
     "commitizen": {

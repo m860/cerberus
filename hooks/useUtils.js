@@ -24,6 +24,3 @@ export default function (): UtilsResult {
     }
 }
 
-export type UtilsResult = {
-    download: (entry: CerberusEntry) => Promise<string>
-};

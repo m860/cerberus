@@ -5,7 +5,6 @@
 import * as React from "react"
 import type {CerberusOption, CerberusResult} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
-import type {Bundle} from "../libs/services";
 import useBundle from "./useBundle";
 
 export type QueryEntry = (entries: Array<string>)=>string | null;
@@ -55,9 +54,10 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
             getBundle(secret)
                 .then((bundle: Bundle) => {
                     setBundle(bundle);
-                }).catch(ex => {
-                setStatus(CerberusStatusCode.error, ex);
-            });
+                })
+                .catch(ex => {
+                    setStatus(CerberusStatusCode.error, ex);
+                });
         }
         return () => {
             //TODO abort fetch

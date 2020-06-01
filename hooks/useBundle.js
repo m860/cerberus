@@ -28,11 +28,6 @@ function getBundle(secret: string): Promise<Bundle> {
     }).then(({data}) => data.bundle);
 }
 
-export type Bundle = {
-    hash: ?string,
-    entry: ?Array<string>
-};
-
 export default function () {
     return {
         getBundle
