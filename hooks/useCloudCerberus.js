@@ -5,8 +5,8 @@
 import * as React from "react"
 import type {CerberusOption, CerberusResult} from "./useCerberus";
 import {CerberusStatusCode, useCerberus} from "./useCerberus";
-import {getBundle} from "../libs/services"
 import type {Bundle} from "../libs/services";
+import useBundle from "./useBundle";
 
 export type QueryEntry = (entries: Array<string>)=>string | null;
 
@@ -32,6 +32,7 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
         ...rest
     } = props;
 
+    const {getBundle} = useBundle();
 
     const [bundle, setBundle] = React.useState<Bundle>({
         entry: null,
