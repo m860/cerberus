@@ -6,7 +6,7 @@ branches:
     - master
 deploy:
   provider: script
-  script: npm run publish
+  script: npm run pub
   skip_cleanup: true
   on:
     branch: master
