@@ -7,7 +7,7 @@ react-native微应用/微组件纯JS解决方案
 - 安装`cerberus-cli`
     
     ```bash
-    $ npm i -D @m860/cerberus-cli
+    $ npm i -g @m860/cerberus-cli
     ```
     
 - 添加`cerberus-cli`配置文件 [配置参数](#cli配置参数说明)
@@ -83,7 +83,7 @@ type CerberusState = {
     status: $Values<typeof CerberusStatusCode>,
     error: ?Error
 };
-type useCerberus=(option:CerberusOption)=>[CerberusState,any]
+type useCerberus=(option:CerberusOption)=>[CerberusState,any,Function]
 ```
     
 ## cli配置参数说明
@@ -125,3 +125,6 @@ type ConfigOption={
     ```jsx harmony
     <Image source={require("image.png")} style={{width:100,height:100}}/>
     ```
+- `debug`模式下缓存不生效
+- 默认缓存使用`AsyncStorage`，也可以自定义缓存方式
+- 所有的缓存都不会自己清楚，如果要清楚缓存需要自己实现，缓存的`key`可以按照一定的规则来设计。
