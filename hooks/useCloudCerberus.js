@@ -3,8 +3,8 @@
  * @author Jean.h.ma 2020/1/7
  */
 import * as React from "react"
-import type {CerberusOption, CerberusResult} from "./useCerberus";
-import {CerberusStatusCode, useCerberus} from "./useCerberus";
+import type {CerberusOption} from "./useCerberus";
+import {useCerberus} from "./useCerberus";
 import useBundle from "./useBundle";
 
 export type QueryEntry = (entries: Array<string>)=>string | null;
@@ -24,7 +24,7 @@ export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any
     queryEntry?: QueryEntry
 }
 
-export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
+export function useCloudCerberus(props: CloudCerberusProps): Object {
     const {
         secret,
         queryEntry = DefaultQueryEntry,
@@ -42,11 +42,11 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
         return queryEntry(bundle && bundle.entry ? bundle.entry : []);
     }, [bundle])
 
-    const [status, defined, setStatus] = useCerberus({
+    const defined = useCerberus({
         ...rest,
         entry: url,
         debug: false,
-        hash: url
+        hash: url || ""
     });
 
     React.useEffect(() => {
@@ -56,7 +56,7 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
                     setBundle(bundle);
                 })
                 .catch(ex => {
-                    setStatus(CerberusStatusCode.error, ex);
+                    console.log(`fetch bundle fail,${ex.message}`);
                 });
         }
         return () => {
@@ -64,5 +64,5 @@ export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
         }
     }, [secret]);
 
-    return [status, defined, setStatus];
+    return defined;
 }
