@@ -31,8 +31,8 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-native": ">=0.50",
-    "realm": "^6.0.2"
+    "react-native": "*",
+    "realm": ">=3"
   },
   "config": {
     "commitizen": {
