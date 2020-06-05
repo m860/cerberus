@@ -120,7 +120,7 @@ export function useCerberus(props: CerberusOption): Object {
                 console.log(`code compile fail : ${ex.message}`);
             }
         } else {
-            console.log(`use backup, code=${JSON.stringify(code)}`)
+            console.log(`hash(${hash}) use backup`)
             return backup();
         }
     }, [code]);
