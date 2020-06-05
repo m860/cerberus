@@ -11,6 +11,12 @@ declare interface ICerberusCache {
     get(hash: string): Promise<string | null>;
 
     set(hash: string, code: string): Promise<any>;
+
+    has(hash: string): Promise<boolean>;
+
+    remove(hash: string): Promise<boolean>;
+
+    clear(): Promise<any>
 }
 
 declare type PreloadOptions = {
