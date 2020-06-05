@@ -57,7 +57,9 @@ export function useCerberus(props: CerberusOption): Object {
     // cache instance
     const {cache} = useCache(providerCache);
     const {download} = useUtils();
-    const [code, setCode] = React.useState<?string>(null);
+    const [code, setCode] = React.useState<?string>(() => {
+        return cache.get(hash);
+    });
     const baseURL: string = React.useMemo(() => {
         if (entry) {
             let url: ?string = null;
@@ -77,10 +79,9 @@ export function useCerberus(props: CerberusOption): Object {
 
     const fetchCode = () => {
         if (entry) {
-            console.log(`fetch code from ${JSON.stringify(entry)} ...`)
             download(entry)
                 .then(value => {
-                    return cache.set(hash, value)
+                    cache.set(hash, value)
                 })
                 .catch(ex => {
                     console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
@@ -97,14 +98,9 @@ export function useCerberus(props: CerberusOption): Object {
                 } catch (ex) {
                     console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
                 }
-            } else {
-                const cacheCode: ?string = await cache.get(hash);
-                if (cacheCode && code !== cacheCode) {
-                    setCode(cacheCode);
-                } else {
-                    // fetch code
-                    fetchCode();
-                }
+            } else if (!cache.has(hash)) {
+                // fetch code
+                fetchCode();
             }
         })();
         return () => {

@@ -5,6 +5,7 @@
 import type {CerberusEntry} from "./useCerberus";
 
 const download = (entry: CerberusEntry) => {
+    console.log("cerberus", `fetch code from ${JSON.stringify(entry)}`);
     let url, option;
     if (typeof entry === "string") {
         url = entry;

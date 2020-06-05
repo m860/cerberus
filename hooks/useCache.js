@@ -6,75 +6,105 @@
  *
  */
 import * as React from "react"
-import AsyncStorage from "@react-native-community/async-storage"
 import useBundle from "./useBundle";
 import useUtils from "./useUtils";
-import asyncIteratorReject from "graphql/subscription/asyncIteratorReject";
+import Realm from 'realm';
 
-const PREFIX = `@cbs_`;
+const CerberusCacheSchema = {
+    name: 'cerberus-cache',
+    primaryKey: 'hash',
+    properties: {
+        hash: 'string',
+        code: 'string'
+    },
+};
 
-class ASCache<ICerberusCache> {
+const instance = new Realm({
+    path: 'cerberus-cache.realm',
+    schema: [CerberusCacheSchema],
+    schemaVersion: 1,
+});
+
+class CerberusCache<ICerberusCache> {
     get(hash: string) {
-        return AsyncStorage.getItem(`${PREFIX}${hash}`);
+        const record = instance.objects(CerberusCacheSchema.name)
+            .find(f => f.hash === hash);
+        return record ? record.code : null;
     }
 
     set(hash: string, code: string) {
-        return AsyncStorage.setItem(`${PREFIX}${hash}`, code);
+        try {
+            instance.beginTransaction();
+            instance.create(CerberusCacheSchema.name, {
+                hash,
+                code
+            }, "all");
+            instance.commitTransaction();
+        } catch (ex) {
+            console.log("cerberus-cache", `save code fail hash=${hash},${ex.message}`);
+            instance.cancelTransaction();
+        }
     }
 
-    has(hash: string): Promise<boolean> {
-        return AsyncStorage
-            .getItem(`${PREFIX}${hash}`)
-            .then(value => !!value)
-            .catch(() => false);
+    has(hash: string) {
+        const record = instance.objects(CerberusCacheSchema.name)
+            .find(f => f.hash === hash);
+        return !!record;
     }
 
-    remove(hash: string): Promise<boolean> {
-        return AsyncStorage
-            .removeItem(`${PREFIX}${hash}`)
-            .then(() => true)
-            .catch(() => false);
+    remove(hash: string) {
+        try {
+            instance.beginTransaction();
+            const records = instance.objects(CerberusCacheSchema.name)
+                .filtered(f => f.hash === hash);
+            instance.delete(records);
+            instance.commitTransaction();
+            return true;
+        } catch (ex) {
+            console.log("cerberus-cache", `remove code fail hash=${hash},${ex.message}`);
+            instance.cancelTransaction();
+            return false;
+        }
     }
 
-    clear(): Promise<any> {
-        return AsyncStorage
-            .getAllKeys()
-            .then(keys => {
-                const cbsKeys = keys.filter(f => new RegExp(`^${PREFIX}`).test(f));
-                return AsyncStorage.multiRemove(cbsKeys);
-            })
+    clear() {
+        try {
+            instance.beginTransaction();
+            const all = instance.objects(CerberusCacheSchema.name);
+            instance.delete(all);
+            instance.commitTransaction();
+        } catch (ex) {
+            console.log("cerberus-cache", `clear cerberus cache fail,${ex.message}`);
+            instance.cancelTransaction();
+        }
     }
 }
 
-const defaultCache = new ASCache();
+const defaultCacheInstance = new CerberusCache();
 
 export default function (cache: ?ICerberusCache): CerberusCacheResult {
 
-    const instance = cache ? cache : defaultCache;
+    const cacheInstance = cache ? cache : defaultCacheInstance;
 
     const {getBundle} = useBundle();
 
     const {download} = useUtils();
 
     const preload = React.useCallback(async (options: PreloadOptions) => {
-        try {
-            const bundle: Bundle = await getBundle(options.secret);
-            const entry: ?Array<string> = bundle.entry;
-            if (entry) {
-                const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
-                if (url) {
-                    const code = await download(url);
-                    await instance.set(url, code);
-                }
+        const bundle: Bundle = await getBundle(options.secret);
+        const entry: ?Array<string> = bundle.entry;
+        if (entry) {
+            const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
+            if (url) {
+                const code = await download(url);
+                cacheInstance.set(url, code);
             }
-            return null;
-        } catch (ex) {
-            return ex;
         }
+        return null;
     }, []);
 
     return {
-        cache: instance,
+        cache: cacheInstance,
         preload
     }
 }

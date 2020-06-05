@@ -32,7 +32,7 @@
   "peerDependencies": {
     "react": ">=16",
     "react-native": ">=0.50",
-    "@react-native-community/async-storage": "^1.11.0"
+    "realm": "^6.0.2"
   },
   "config": {
     "commitizen": {

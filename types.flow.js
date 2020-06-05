@@ -8,15 +8,15 @@ import type {CerberusEntry} from "./hooks/useCerberus";
 declare type QueryEntry = (entries: Array<string>)=>string | null;
 
 declare interface ICerberusCache {
-    get(hash: string): Promise<string | null>;
+    get(hash: string): string | null;
 
-    set(hash: string, code: string): Promise<any>;
+    set(hash: string, code: string): any;
 
-    has(hash: string): Promise<boolean>;
+    has(hash: string): boolean;
 
-    remove(hash: string): Promise<boolean>;
+    remove(hash: string): boolean;
 
-    clear(): Promise<any>
+    clear(): any
 }
 
 declare type PreloadOptions = {
