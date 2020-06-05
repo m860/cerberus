@@ -1,7 +1,6 @@
 /**
  * @flow
  * @author Jean.h.ma 2019-11-25
- * @TODO 在debug环境下实现reload
  *
  * Cerberus Hook
  *
@@ -13,27 +12,6 @@ import {useDebug} from "./useDebug";
 import useUtils from "./useUtils";
 import useCache from "./useCache";
 
-/**
- * 状态
- */
-export const CerberusStatusCode = {
-    // 准备
-    prepare: "prepare",
-    // 下载中
-    downloading: "downloading",
-    // 编译中
-    compiling: "compiling",
-    // 错误
-    error: "error",
-    // 成功
-    success: "success"
-};
-
-export type CerberusState = {
-    status: $Keys<typeof CerberusStatusCode>,
-    error: ?Error
-};
-
 export type CerberusEntry = ?string | ?{ url: string, option?: Object };
 
 export type CerberusOption = {
@@ -44,7 +22,13 @@ export type CerberusOption = {
     /**
      * 全局唯一，建议使用content hash
      */
-    hash: ?string,
+    hash: string,
+    /**
+     * 备选方案，保证可用性，什么时候会触发备选方案？
+     * 1、当本地缓存不可用时
+     * 2、当代码编译失败时
+     */
+    backup: ()=>Object,
     /**
      * 缓存实例，需要实现`ICerberusCache`接口，默认使用存策内存缓存，用户可以自己实现缓略，如果hash为null或者debug=true缓存将不会生效
      */
@@ -54,37 +38,26 @@ export type CerberusOption = {
      */
     injectModules?: ()=>Object,
     /**
-     * 默认需要执行的代码
-     */
-    defaultCode?: string,
-    /**
      * 是否开起debug模式,默认值：false
      */
-    debug?: boolean
+    debug?: boolean,
 };
 
-export type CerberusResult = [
-    // 当前cerberus状态
-    { current: CerberusState | null },
-    any,
-    Function
-];
 
-export function useCerberus(props: CerberusOption): CerberusResult {
+export function useCerberus(props: CerberusOption): Object {
     const {
         entry,
         injectModules = () => {
         },
-        defaultCode = null,
         debug = false,
         hash,
-        cache: providerCache
+        cache: providerCache,
+        backup
     } = props;
     // cache instance
     const {cache} = useCache(providerCache);
     const {download} = useUtils();
-    const [code, setCode] = React.useState<?string>(defaultCode);
-    const status = React.useRef<CerberusState>({status: CerberusStatusCode.prepare, error: null});
+    const [code, setCode] = React.useState<?string>(null);
     const baseURL: string = React.useMemo(() => {
         if (entry) {
             let url: ?string = null;
@@ -102,39 +75,35 @@ export function useCerberus(props: CerberusOption): CerberusResult {
     }, [entry]);
     const lastUpdateDate = useDebug(debug, baseURL);
 
-    const setStatus = React.useCallback((s: $Values<typeof CerberusStatusCode>, ex?: ?Error) => {
-        if (status.current) {
-            status.current.status = s;
-            status.current.error = ex;
+    const fetchCode = () => {
+        if (entry) {
+            console.log(`fetch code from ${JSON.stringify(entry)} ...`)
+            download(entry)
+                .then(value => {
+                    return cache.set(hash, value)
+                })
+                .catch(ex => {
+                    console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
+                })
         }
-    }, []);
+    }
 
     React.useEffect(() => {
         (async () => {
-            if (!debug && hash && cache) {
-                const cacheCode: ?string = await cache.get(hash);
-                if (cacheCode) {
-                    if (code !== cacheCode) {
-                        setCode(cacheCode);
-                        return;
-                    }
-                }
-            }
-            if (entry) {
-                setStatus(CerberusStatusCode.downloading);
+            if (debug) {
                 try {
-                    const text = await download(entry);
-                    if (code !== text) {
-                        setCode(text);
-                        if (hash && cache) {
-                            await cache.set(hash, text);
-                        }
-                    } else {
-                        // 如果代码没有变化，则将状态修改为success
-                        setStatus(CerberusStatusCode.success);
-                    }
+                    const value = await download(entry);
+                    setCode(value);
                 } catch (ex) {
-                    setStatus(CerberusStatusCode.error, ex);
+                    console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
+                }
+            } else {
+                const cacheCode: ?string = await cache.get(hash);
+                if (cacheCode && code !== cacheCode) {
+                    setCode(cacheCode);
+                } else {
+                    // fetch code
+                    fetchCode();
                 }
             }
         })();
@@ -144,21 +113,21 @@ export function useCerberus(props: CerberusOption): CerberusResult {
     }, [entry, lastUpdateDate, hash]);
 
     const defined = React.useMemo<any>(() => {
-        let result = null;
         if (code) {
             try {
                 // $FlowFixMe
-                result = (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `${code} return __exps__`))(React, ReactNative, {
+                return (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `${code} return __exps__`))(React, ReactNative, {
                     ...injectModules(),
                     __BASE_URL__: baseURL
                 });
-                setStatus(CerberusStatusCode.success);
             } catch (ex) {
-                setStatus(CerberusStatusCode.error, ex);
+                console.log(`code compile fail : ${ex.message}`);
             }
+        } else {
+            console.log(`use backup, code=${JSON.stringify(code)}`)
+            return backup();
         }
-        return result;
     }, [code]);
 
-    return [status, defined, setStatus]
+    return defined;
 }
