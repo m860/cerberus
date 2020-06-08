@@ -83,8 +83,11 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
         if (entry) {
             const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
             if (url) {
-                const code = await download(url);
-                cacheInstance.set(url, code);
+                // 没有缓存才进行下载
+                if (!cacheInstance.has(url)) {
+                    const code = await download(url);
+                    cacheInstance.set(url, code);
+                }
             }
         }
         return null;

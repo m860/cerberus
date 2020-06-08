@@ -51,7 +51,7 @@ export function useCerberus(props: CerberusOption): Object {
                 cache.set(hash, value)
             })
             .catch(ex => {
-                console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
+                console.log("cerberus",`download ${JSON.stringify(entry)} fail,${ex.message}`);
             })
     }
 
@@ -62,7 +62,7 @@ export function useCerberus(props: CerberusOption): Object {
                     const value = await download(entry);
                     setCode(value);
                 } catch (ex) {
-                    console.log(`download ${JSON.stringify(entry)} fail,${ex.message}`);
+                    console.log("cerberus",`download ${JSON.stringify(entry)} fail,${ex.message}`);
                 }
             } else {
                 // 如果没有缓存，就拉取最新代码进行缓存
@@ -89,10 +89,10 @@ export function useCerberus(props: CerberusOption): Object {
                     __BASE_URL__: baseURL
                 });
             } catch (ex) {
-                console.log(`code compile fail : ${ex.message}`);
+                console.log("cerberus", `code compile fail : ${ex.message}`);
             }
         } else {
-            console.log(`hash(${hash || ""}) use backup`)
+            console.log("cerberus", `${debug ? "[debug]" : ""}hash(${hash || ""}) use backup`)
             return backup();
         }
     }, [code]);
