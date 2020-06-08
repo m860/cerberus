@@ -92,6 +92,8 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
                 bundles: result.entry
             }
             bundleCache.set(bundle)
+        } else {
+            console.log("cerberus", `preload ${secret},bundle is cached`);
         }
         if (bundle) {
             const entry: ?Array<string> = bundle.bundles;
@@ -102,6 +104,8 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
                     if (!cacheInstance.has(url)) {
                         const code = await download(url);
                         cacheInstance.set(url, code);
+                    } else {
+                        console.log("cerberus", `preload ${secret},code is cached ${url}`);
                     }
                 }
             }

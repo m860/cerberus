@@ -46,13 +46,15 @@ export function useCerberus(props: CerberusOption): Object {
     const lastUpdateDate = useDebug(debug, baseURL);
 
     const fetchCode = () => {
-        download(entry)
-            .then(value => {
-                cache.set(hash, value)
-            })
-            .catch(ex => {
-                console.log("cerberus",`download ${JSON.stringify(entry)} fail,${ex.message}`);
-            })
+        if (entry) {
+            download(entry)
+                .then(value => {
+                    cache.set(hash, value)
+                })
+                .catch(ex => {
+                    console.log("cerberus", `download ${JSON.stringify(entry)} fail,${ex.message}`);
+                })
+        }
     }
 
     React.useEffect(() => {
@@ -62,7 +64,7 @@ export function useCerberus(props: CerberusOption): Object {
                     const value = await download(entry);
                     setCode(value);
                 } catch (ex) {
-                    console.log("cerberus",`download ${JSON.stringify(entry)} fail,${ex.message}`);
+                    console.log("cerberus", `download ${JSON.stringify(entry)} fail,${ex.message}`);
                 }
             } else {
                 // 如果没有缓存，就拉取最新代码进行缓存
