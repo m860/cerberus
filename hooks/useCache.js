@@ -83,18 +83,14 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
             queryEntry
         } = options;
         console.log("cerberus", `preload ${secret}`);
-        let bundle: ?BundleRecord = bundleCache.get(secret);
-        if (!bundle) {
-            const result: Bundle = await getBundle(secret);
-            bundle = {
-                secret: secret,
-                hash: result.hash,
-                bundles: result.entry
-            }
-            bundleCache.set(bundle)
-        } else {
-            console.log("cerberus", `preload ${secret},bundle is cached`);
+        // 每次都必须重新拉取最新的bundle
+        const result: Bundle = await getBundle(secret);
+        const bundle: BundleRecord = {
+            secret: secret,
+            hash: result.hash,
+            bundles: result.entry
         }
+        bundleCache.set(bundle)
         if (bundle) {
             const entry: ?Array<string> = bundle.bundles;
             if (entry) {

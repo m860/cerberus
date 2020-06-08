@@ -48,7 +48,7 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
         ...rest,
         entry: url,
         debug: false,
-        hash: url || ""
+        hash: url || secret
     });
 
     React.useEffect(() => {
