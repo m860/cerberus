@@ -92,16 +92,28 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
         }
         bundleCache.set(bundle)
         if (bundle) {
-            const entry: ?Array<string> = bundle.bundles;
-            if (entry) {
-                const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
-                if (url) {
-                    // 没有缓存才进行下载
-                    if (!cacheInstance.has(url)) {
-                        const code = await download(url);
-                        cacheInstance.set(url, code);
-                    } else {
-                        console.log("cerberus", `preload ${secret},code is cached ${url}`);
+            const urls: ?Array<string> = bundle.bundles;
+            if (urls) {
+                if (queryEntry) {
+                    const url: ?string = queryEntry(urls);
+                    if (url) {
+                        // 没有缓存才进行下载
+                        if (!cacheInstance.has(url)) {
+                            const code = await download(url);
+                            cacheInstance.set(url, code);
+                        } else {
+                            console.log("cerberus", `preload ${secret},code is cached ${url}`);
+                        }
+                    }
+                } else {
+                    for (let i = 0; i < urls.length; i++) {
+                        const url = urls[i];
+                        if (!cacheInstance.has(url)) {
+                            const code = await download(url);
+                            cacheInstance.set(url, code);
+                        } else {
+                            console.log("cerberus", `preload ${secret},code is cached ${url}`);
+                        }
                     }
                 }
             }

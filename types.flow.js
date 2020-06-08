@@ -37,7 +37,8 @@ declare type PreloadOptions = {
     secret: string,
     // bundle缓存
     bundleCache: IBundleCache,
-    queryEntry?: QueryEntry,
+    // 如果参数缺省，则会加载bundle下的所有entry
+    queryEntry?: ?QueryEntry,
     // 默认的bundle，如果存在会优先使用
     bundle?: ?Bundle,
 }
