@@ -3,11 +3,10 @@
  * @author Jean.h.ma 2020/1/7
  */
 import * as React from "react"
-import type {CerberusOption} from "./useCerberus";
 import {useCerberus} from "./useCerberus";
 import useBundle from "./useBundle";
-
-export type QueryEntry = (entries: Array<string>)=>string | null;
+import instance from "../realm/index"
+import BundleSchema from "../realm/bundle.schema"
 
 export const DefaultQueryEntry = (entries: Array<string>): string | null => {
     if (entries && entries.length > 0) {
@@ -15,14 +14,6 @@ export const DefaultQueryEntry = (entries: Array<string>): string | null => {
     }
     return null;
 };
-
-export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
-    secret: ?string,
-    /**
-     * 查询需要使用的entry，默认情况返回第一个entry
-     */
-    queryEntry?: QueryEntry
-}
 
 export function useCloudCerberus(props: CloudCerberusProps): Object {
     const {
@@ -33,10 +24,19 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
 
     const {getBundle} = useBundle();
 
-    const [bundle, setBundle] = React.useState<Bundle>({
-        entry: null,
-        hash: null
-    });
+    const bundle=React.useMemo(()=>{
+        const record = instance.objects(BundleSchema.name).find(f => f.secret === secret);
+        if (record) {
+            return {
+                entry: record.bundles,
+                hash: record.hash
+            }
+        }
+        return {
+            entry: null,
+            hash: null
+        }
+    },[])
 
     const url: ?string = React.useMemo(() => {
         return queryEntry(bundle && bundle.entry ? bundle.entry : []);
@@ -50,10 +50,17 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     });
 
     React.useEffect(() => {
+        //update bundle
         if (secret) {
             getBundle(secret)
-                .then((bundle: Bundle) => {
-                    setBundle(bundle);
+                .then((result: Bundle) => {
+                    instance.write(() => {
+                        instance.create(BundleSchema.name, {
+                            secret: secret,
+                            hash: result.hash,
+                            bundles: result.entry
+                        }, "all")
+                    })
                 })
                 .catch(ex => {
                     console.log(`fetch bundle fail,${ex.message}`);
@@ -62,7 +69,7 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
         return () => {
             //TODO abort fetch
         }
-    }, [secret]);
+    }, []);
 
     return defined;
 }

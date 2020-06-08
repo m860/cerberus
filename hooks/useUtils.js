@@ -2,8 +2,6 @@
  * @flow
  * @author Jean.h.ma 2020/6/1
  */
-import type {CerberusEntry} from "./useCerberus";
-
 const download = (entry: CerberusEntry) => {
     console.log("cerberus", `fetch code from ${JSON.stringify(entry)}`);
     let url, option;

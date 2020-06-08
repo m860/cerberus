@@ -8,26 +8,12 @@
 import * as React from "react"
 import useBundle from "./useBundle";
 import useUtils from "./useUtils";
-import Realm from 'realm';
-
-const CerberusCacheSchema = {
-    name: 'cerberus-cache',
-    primaryKey: 'hash',
-    properties: {
-        hash: 'string',
-        code: 'string'
-    },
-};
-
-const instance = new Realm({
-    path: 'cerberus-cache.realm',
-    schema: [CerberusCacheSchema],
-    schemaVersion: 1,
-});
+import instance from "../realm/index"
+import CacheSchema from "../realm/cache.schema"
 
 class CerberusCache<ICerberusCache> {
     get(hash: string) {
-        const record = instance.objects(CerberusCacheSchema.name)
+        const record = instance.objects(CacheSchema.name)
             .find(f => f.hash === hash);
         return record ? record.code : null;
     }
@@ -35,7 +21,7 @@ class CerberusCache<ICerberusCache> {
     set(hash: string, code: string) {
         try {
             instance.beginTransaction();
-            instance.create(CerberusCacheSchema.name, {
+            instance.create(CacheSchema.name, {
                 hash,
                 code
             }, "all");
@@ -47,7 +33,7 @@ class CerberusCache<ICerberusCache> {
     }
 
     has(hash: string) {
-        const record = instance.objects(CerberusCacheSchema.name)
+        const record = instance.objects(CacheSchema.name)
             .find(f => f.hash === hash);
         return !!record;
     }
@@ -55,7 +41,7 @@ class CerberusCache<ICerberusCache> {
     remove(hash: string) {
         try {
             instance.beginTransaction();
-            const records = instance.objects(CerberusCacheSchema.name)
+            const records = instance.objects(CacheSchema.name)
                 .filtered(f => f.hash === hash);
             instance.delete(records);
             instance.commitTransaction();
@@ -70,7 +56,7 @@ class CerberusCache<ICerberusCache> {
     clear() {
         try {
             instance.beginTransaction();
-            const all = instance.objects(CerberusCacheSchema.name);
+            const all = instance.objects(CacheSchema.name);
             instance.delete(all);
             instance.commitTransaction();
         } catch (ex) {
