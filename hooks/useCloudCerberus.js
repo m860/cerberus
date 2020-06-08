@@ -7,6 +7,7 @@ import {useCerberus} from "./useCerberus";
 import useBundle from "./useBundle";
 import instance from "../realm/index"
 import BundleSchema from "../realm/bundle.schema"
+import {useCache} from "../index";
 
 export const DefaultQueryEntry = (entries: Array<string>): string | null => {
     if (entries && entries.length > 0) {
@@ -23,8 +24,9 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     } = props;
 
     const {getBundle} = useBundle();
+    const {preload} = useCache(rest.cache);
 
-    const bundle=React.useMemo(()=>{
+    const bundle = React.useMemo(() => {
         const record = instance.objects(BundleSchema.name).find(f => f.secret === secret);
         if (record) {
             return {
@@ -36,7 +38,7 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
             entry: null,
             hash: null
         }
-    },[])
+    }, [])
 
     const url: ?string = React.useMemo(() => {
         return queryEntry(bundle && bundle.entry ? bundle.entry : []);
@@ -60,6 +62,11 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
                             hash: result.hash,
                             bundles: result.entry
                         }, "all")
+                    })
+                    //preload
+                    preload({
+                        secret: secret,
+                        queryEntry: queryEntry
                     })
                 })
                 .catch(ex => {

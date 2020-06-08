@@ -77,6 +77,7 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
     const {download} = useUtils();
 
     const preload = React.useCallback(async (options: PreloadOptions) => {
+        console.log("cerberus", `preload ${options.secret}`);
         const bundle: Bundle = await getBundle(options.secret);
         const entry: ?Array<string> = bundle.entry;
         if (entry) {
