@@ -17,9 +17,29 @@ declare interface ICerberusCache {
     clear(): any
 }
 
+declare type BundleRecord = {
+    secret: string,
+    hash: string,
+    bundles: Array<string>
+};
+
+declare interface IBundleCache {
+    get(secret: string): BundleRecord | null;
+
+    set(record: BundleRecord): any;
+
+    has(secret: string): boolean;
+
+    clear(): any;
+}
+
 declare type PreloadOptions = {
     secret: string,
-    queryEntry?: QueryEntry
+    // bundle缓存
+    bundleCache: IBundleCache,
+    queryEntry?: QueryEntry,
+    // 默认的bundle，如果存在会优先使用
+    bundle?: ?Bundle,
 }
 
 declare type CerberusCacheResult = {
@@ -28,8 +48,8 @@ declare type CerberusCacheResult = {
 };
 
 declare type Bundle = {
-    hash: ?string,
-    entry: ?Array<string>
+    hash: string,
+    entry: Array<string>
 };
 
 declare type UtilsResult = {
@@ -71,9 +91,10 @@ declare type CerberusOption = {
 };
 
 declare type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
-    secret: ?string,
+    secret: string,
     /**
      * 查询需要使用的entry，默认情况返回第一个entry
      */
-    queryEntry?: QueryEntry
+    queryEntry?: QueryEntry,
+    bundleCache?: ?IBundleCache
 }

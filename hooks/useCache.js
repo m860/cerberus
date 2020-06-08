@@ -77,20 +77,35 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
     const {download} = useUtils();
 
     const preload = React.useCallback(async (options: PreloadOptions) => {
-        console.log("cerberus", `preload ${options.secret}`);
-        const bundle: Bundle = await getBundle(options.secret);
-        const entry: ?Array<string> = bundle.entry;
-        if (entry) {
-            const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
-            if (url) {
-                // 没有缓存才进行下载
-                if (!cacheInstance.has(url)) {
-                    const code = await download(url);
-                    cacheInstance.set(url, code);
+        const {
+            secret,
+            bundleCache,
+            queryEntry
+        } = options;
+        console.log("cerberus", `preload ${secret}`);
+        let bundle: ?BundleRecord = bundleCache.get(secret);
+        if (!bundle) {
+            const result: Bundle = await getBundle(secret);
+            bundle = {
+                secret: secret,
+                hash: result.hash,
+                bundles: result.entry
+            }
+            bundleCache.set(bundle)
+        }
+        if (bundle) {
+            const entry: ?Array<string> = bundle.bundles;
+            if (entry) {
+                const url: ?string = options.queryEntry ? options.queryEntry(entry) : null;
+                if (url) {
+                    // 没有缓存才进行下载
+                    if (!cacheInstance.has(url)) {
+                        const code = await download(url);
+                        cacheInstance.set(url, code);
+                    }
                 }
             }
         }
-        return null;
     }, []);
 
     return {

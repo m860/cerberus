@@ -4,10 +4,9 @@
  */
 import * as React from "react"
 import {useCerberus} from "./useCerberus";
-import useBundle from "./useBundle";
-import instance from "../realm/index"
-import BundleSchema from "../realm/bundle.schema"
 import {useCache} from "../index";
+import useBundleCache from "./useBundleCache";
+
 
 export const DefaultQueryEntry = (entries: Array<string>): string | null => {
     if (entries && entries.length > 0) {
@@ -20,14 +19,15 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     const {
         secret,
         queryEntry = DefaultQueryEntry,
+        bundleCache,
         ...rest
     } = props;
 
-    const {getBundle} = useBundle();
+    const {cache: bundleCacheInstance} = useBundleCache(bundleCache)
     const {preload} = useCache(rest.cache);
 
     const bundle = React.useMemo(() => {
-        const record = instance.objects(BundleSchema.name).find(f => f.secret === secret);
+        const record = bundleCacheInstance.get(secret);
         if (record) {
             return {
                 entry: record.bundles,
@@ -52,27 +52,12 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     });
 
     React.useEffect(() => {
-        //update bundle
-        if (secret) {
-            getBundle(secret)
-                .then((result: Bundle) => {
-                    instance.write(() => {
-                        instance.create(BundleSchema.name, {
-                            secret: secret,
-                            hash: result.hash,
-                            bundles: result.entry
-                        }, "all")
-                    })
-                    //preload
-                    preload({
-                        secret: secret,
-                        queryEntry: queryEntry
-                    })
-                })
-                .catch(ex => {
-                    console.log(`fetch bundle fail,${ex.message}`);
-                });
-        }
+        // preload
+        preload({
+            secret: secret,
+            queryEntry: queryEntry,
+            bundleCache: bundleCacheInstance
+        })
         return () => {
             //TODO abort fetch
         }
