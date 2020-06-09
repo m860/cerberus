@@ -30,7 +30,7 @@ export default function () {
         bundleCount: (bundleID: string) => {
             return context.client.mutate({
                 mutation: gql`
-                    mutation bundleCount($bundleID){
+                    mutation bundleCount($bundleID:String){
                         bundleCount(bundleID: $bundleID)
                     }
                 `,

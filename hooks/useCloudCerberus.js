@@ -4,7 +4,7 @@
  */
 import * as React from "react"
 import {useCerberus} from "./useCerberus";
-import {useCache} from "../index";
+import useCache from "./useCache";
 import useBundleCache from "./useBundleCache";
 
 
