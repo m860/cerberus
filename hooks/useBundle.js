@@ -4,13 +4,14 @@
  */
 
 import {gql} from "apollo-boost";
-import useApolloClient from "./useApolloClient";
+import * as React from "react"
+import Context from "../components/CerberusContextProvider";
 
 export default function () {
-    const client = useApolloClient();
+    const context = React.useContext(Context);
     return {
         getBundle: (secret: string): Promise<Bundle> => {
-            return client.query({
+            return context.client.query({
                 query: gql`
                     query bundle($secret:String!){
                         bundle(secret:$secret){
@@ -27,7 +28,7 @@ export default function () {
             }).then(({data}) => data.bundle);
         },
         bundleCount: (bundleID: string) => {
-            return client.mutate({
+            return context.client.mutate({
                 mutation: gql`
                     mutation bundleCount($bundleID){
                         bundleCount(bundleID: $bundleID)
