@@ -72,7 +72,7 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
 
     const cacheInstance = cache ? cache : defaultCacheInstance;
 
-    const {getBundle} = useBundle();
+    const {getBundle, bundleCount} = useBundle();
 
     const {download} = useUtils();
 
@@ -80,7 +80,6 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
         const {
             secret,
             bundleCache,
-            queryEntry
         } = options;
         console.log("cerberus", `preload ${secret}`);
         // 每次都必须重新拉取最新的bundle
@@ -94,26 +93,16 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
         if (bundle) {
             const urls: ?Array<string> = bundle.bundles;
             if (urls) {
-                if (queryEntry) {
-                    const url: ?string = queryEntry(urls);
-                    if (url) {
-                        // 没有缓存才进行下载
-                        if (!cacheInstance.has(url)) {
-                            const code = await download(url);
-                            cacheInstance.set(url, code);
-                        } else {
-                            console.log("cerberus", `preload ${secret},code is cached ${url}`);
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < urls.length; i++) {
-                        const url = urls[i];
-                        if (!cacheInstance.has(url)) {
-                            const code = await download(url);
-                            cacheInstance.set(url, code);
-                        } else {
-                            console.log("cerberus", `preload ${secret},code is cached ${url}`);
-                        }
+                // 记录bundle的下载次数
+                bundleCount(result.id);
+
+                for (let i = 0; i < urls.length; i++) {
+                    const url = urls[i];
+                    if (!cacheInstance.has(url)) {
+                        const code = await download(url);
+                        cacheInstance.set(url, code);
+                    } else {
+                        console.log("cerberus", `preload ${secret},code is cached ${url}`);
                     }
                 }
             }

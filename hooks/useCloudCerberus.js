@@ -55,7 +55,6 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
         // preload
         preload({
             secret: secret,
-            queryEntry: queryEntry,
             bundleCache: bundleCacheInstance
         })
         return () => {

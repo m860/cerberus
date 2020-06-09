@@ -37,10 +37,6 @@ declare type PreloadOptions = {
     secret: string,
     // bundle缓存
     bundleCache: IBundleCache,
-    // 如果参数缺省，则会加载bundle下的所有entry
-    queryEntry?: ?QueryEntry,
-    // 默认的bundle，如果存在会优先使用
-    bundle?: ?Bundle,
 }
 
 declare type CerberusCacheResult = {
@@ -50,7 +46,8 @@ declare type CerberusCacheResult = {
 
 declare type Bundle = {
     hash: string,
-    entry: Array<string>
+    entry: Array<string>,
+    id: string
 };
 
 declare type UtilsResult = {
