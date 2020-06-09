@@ -93,17 +93,21 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
         if (bundle) {
             const urls: ?Array<string> = bundle.bundles;
             if (urls) {
-                // 记录bundle的下载次数
-                bundleCount(result.id);
-
+                let count = 0;
                 for (let i = 0; i < urls.length; i++) {
                     const url = urls[i];
                     if (!cacheInstance.has(url)) {
                         const code = await download(url);
                         cacheInstance.set(url, code);
+                        count++;
                     } else {
                         console.log("cerberus", `preload ${secret},code is cached ${url}`);
                     }
+                }
+                if (count > 0) {
+                    // 只要有一个bundle下载成功就算当前bundle已下载过
+                    // 记录bundle的下载次数
+                    bundleCount(result.id);
                 }
             }
         }
