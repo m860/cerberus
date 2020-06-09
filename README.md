@@ -122,6 +122,27 @@ type ConfigOption={
 - 一级页面不要使用`cerberus`来管理组件
 - 预加载组件，在APP启动的时候进行一次预加载。
 
+## 自定义cloud访问的client
+
+```jsx harmony
+// 在App中使用CerberusContextProvider来自定义client
+import * as React from "react"
+import ApolloClient from "apollo-boost";
+import {CerberusContextProvider} from "@m860/cerberus"
+
+export default function (){
+    return (
+        <CerberusContextProvider value={{
+            client:new ApolloClient({
+                uri:"",
+                fetch:fetch
+            })
+        }}>
+        </CerberusContextProvider>
+    );
+}
+```
+
 ## Troubleshoot
 
 - 图片没有显示出来

@@ -3,15 +3,11 @@
  * @author Jean.h.ma 2020/6/1
  */
 
-import ApolloClient from 'apollo-boost/lib/index';
 import {gql} from "apollo-boost";
-
-const client = new ApolloClient({
-    uri: `http://39.99.175.213/graphql`,
-    fetch: fetch
-});
+import useApolloClient from "./useApolloClient";
 
 function getBundle(secret: string): Promise<Bundle> {
+    const client = useApolloClient();
     return client.query({
         query: gql`
             query bundle($secret:String!){

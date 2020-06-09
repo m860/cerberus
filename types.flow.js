@@ -99,3 +99,7 @@ declare type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: an
     queryEntry?: QueryEntry,
     bundleCache?: ?IBundleCache
 }
+
+declare type CerberusContext = {
+    client: Object
+};
