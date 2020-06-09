@@ -76,7 +76,7 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
 
     const {download} = useUtils();
 
-    const preload = React.useCallback(async (options: PreloadOptions) => {
+    const preload = async (options: PreloadOptions) => {
         const {
             secret,
             bundleCache,
@@ -107,7 +107,7 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
                 }
             }
         }
-    }, []);
+    };
 
     return {
         cache: cacheInstance,
