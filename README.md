@@ -154,4 +154,5 @@ export default function (){
 - `debug`模式下缓存不生效
 - 默认缓存使用`AsyncStorage`，也可以自定义缓存方式
 - 所有的缓存都不会自己清楚，如果要清楚缓存需要自己实现，缓存的`key`可以按照一定的规则来设计。
+- `queryEntry`参数的urls的顺序和配置文件中的顺序可能不一致，不要使用如下方式：`(urls)=>urls[2]`
 
