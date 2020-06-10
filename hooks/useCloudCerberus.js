@@ -57,15 +57,17 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     });
 
     React.useEffect(() => {
-        // preload
-        preload({
-            secret: secret,
-            bundleCache: bundleCacheInstance
-        })
+        if (debug) {
+            // preload
+            preload({
+                secret: secret,
+                bundleCache: bundleCacheInstance
+            })
+        }
         return () => {
             //TODO abort fetch
         }
-    }, []);
+    }, [debug]);
 
     return defined;
 }
