@@ -57,7 +57,7 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     });
 
     React.useEffect(() => {
-        if (debug) {
+        if (!debug) {
             // preload
             preload({
                 secret: secret,
