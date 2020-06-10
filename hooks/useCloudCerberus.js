@@ -20,6 +20,8 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
         secret,
         queryEntry = DefaultQueryEntry,
         bundleCache,
+        debug = false,
+        debugEntry,
         ...rest
     } = props;
 
@@ -41,13 +43,16 @@ export function useCloudCerberus(props: CloudCerberusProps): Object {
     }, [])
 
     const url: ?string = React.useMemo(() => {
+        if (debug) {
+            return debugEntry;
+        }
         return queryEntry(bundle && bundle.entry ? bundle.entry : []);
-    }, [bundle])
+    }, [bundle, debug])
 
     const defined = useCerberus({
         ...rest,
         entry: url,
-        debug: false,
+        debug: debug,
         hash: url || secret
     });
 

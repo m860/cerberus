@@ -88,13 +88,15 @@ declare type CerberusOption = {
     debug?: boolean,
 };
 
-declare type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
+declare type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, hash: any |}> & {
     secret: string,
     /**
      * 查询需要使用的entry，默认情况返回第一个entry
      */
     queryEntry?: QueryEntry,
-    bundleCache?: ?IBundleCache
+    bundleCache?: ?IBundleCache,
+    // 调试模式的entry
+    debugEntry?: ?string
 }
 
 declare type CerberusContext = {
