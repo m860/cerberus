@@ -133,10 +133,9 @@ import {CerberusContextProvider} from "@m860/cerberus"
 export default function (){
     return (
         <CerberusContextProvider value={{
-            client:new ApolloClient({
-                uri:"",
-                fetch:fetch
-            })
+            client:{
+                uri:"http://xxx"
+            }
         }}>
         </CerberusContextProvider>
     );
