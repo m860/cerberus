@@ -1,3 +1,5 @@
 export * from "./hooks/useCerberus"
 export * from "./hooks/useCloudCerberus"
-export {ICerberusCache} from "./libs/CerberusMemoryCache"
+export {default as useCache} from "./hooks/useCache"
+export {default as useBundleCache} from "./hooks/useBundleCache"
+export {CerberusContextProvider} from "./components/CerberusContextProvider"

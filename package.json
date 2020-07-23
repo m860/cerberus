@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cm": "git-cz",
-    "publish": "semantic-release && git checkout package.json",
+    "pub": "semantic-release",
     "flow": "flow status"
   },
   "repository": {
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/m860/cerberus#readme",
   "devDependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@semantic-release/gitlab": "^3.1.2",
     "commitizen": "^3.0.7",
     "cz-conventional-changelog": "^2.1.0",
@@ -30,7 +31,9 @@
   },
   "peerDependencies": {
     "react": ">=16",
-    "react-native": ">=0.50"
+    "react-native": "*",
+    "realm": ">=3",
+    "apollo-boost": "0.4.7"
   },
   "config": {
     "commitizen": {
@@ -38,7 +41,6 @@
     }
   },
   "dependencies": {
-    "apollo-boost": "^0.4.7",
     "graphql": "^14.5.8",
     "socket.io-client": "2.3.0"
   },

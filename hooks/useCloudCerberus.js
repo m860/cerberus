@@ -3,66 +3,71 @@
  * @author Jean.h.ma 2020/1/7
  */
 import * as React from "react"
-import type {CerberusOption, CerberusResult} from "./useCerberus";
-import {CerberusStatusCode, useCerberus} from "./useCerberus";
-import client from "../libs/client"
-import {gql} from "apollo-boost"
+import {useCerberus} from "./useCerberus";
+import useCache from "./useCache";
+import useBundleCache from "./useBundleCache";
 
-export type CloudCerberusProps = $Diff<CerberusOption, {| entry: any, debug: any, hash: any |}> & {
-    secret: ?string,
-    /**
-     * 查询需要使用的entry，默认情况返回第一个entry
-     */
-    queryEntry?: (entries: Array<string>)=>string | null
-}
 
-export function useCloudCerberus(props: CloudCerberusProps): CerberusResult {
+export const DefaultQueryEntry = (entries: Array<string>): string | null => {
+    if (entries && entries.length > 0) {
+        return entries[0];
+    }
+    return null;
+};
+
+export function useCloudCerberus(props: CloudCerberusProps): Object {
     const {
         secret,
-        queryEntry = (entries: Array<string>): string | null => {
-            if (entries && entries.length > 0) {
-                return entries[0];
-            }
-            return null;
-        },
+        queryEntry = DefaultQueryEntry,
+        bundleCache,
+        debug = false,
+        debugEntry,
         ...rest
     } = props;
 
+    const {cache: bundleCacheInstance} = useBundleCache(bundleCache)
+    const {preload} = useCache(rest.cache);
 
-    const [bundle, setBundle] = React.useState<{| entry: Array<string> | null, hash: ?string |}>({
-        entry: null,
-        hash: null
-    });
-    const [status, defined, setStatus] = useCerberus({
+    const bundle = React.useMemo(() => {
+        const record = bundleCacheInstance.get(secret);
+        if (record) {
+            return {
+                entry: record.bundles,
+                hash: record.hash
+            }
+        }
+        return {
+            entry: null,
+            hash: null
+        }
+    }, [])
+
+    const url: ?string = React.useMemo(() => {
+        if (debug) {
+            return debugEntry;
+        }
+        return queryEntry(bundle && bundle.entry ? bundle.entry : []);
+    }, [bundle, debug])
+
+    const defined = useCerberus({
         ...rest,
-        entry: queryEntry(bundle && bundle.entry ? bundle.entry : []),
-        debug: false,
-        hash: bundle.hash
+        entry: url,
+        debug: debug,
+        hash: url || secret
     });
 
     React.useEffect(() => {
-        if (secret) {
-            // get entry with secret
-            client.query({
-                query: gql`
-                    query bundle($secret:String!){
-                        bundle(secret:$secret){
-                            entry,
-                            hash
-                        }
-                    }
-                `,
-                variables: {
-                    secret
-                },
-                fetchPolicy: 'network-only'
-            }).then(({data: {bundle}}) => {
-                setBundle(bundle);
-            }).catch(ex => {
-                setStatus(CerberusStatusCode.error, ex);
-            });
+        if (!debug) {
+            // preload
+            preload({
+                secret: secret,
+                bundleCache: bundleCacheInstance
+            })
         }
-    }, [secret]);
+        return () => {
+            //TODO abort fetch
+        }
+    }, [debug]);
 
-    return [status, defined, setStatus];
+    return defined;
 }
