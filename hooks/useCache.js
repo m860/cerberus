@@ -2,7 +2,7 @@
  * @flow
  * @author Jean.h.ma 2020/6/1
  *
- * Cache for Async Storage
+ * 用于缓存js代码
  *
  */
 import * as React from "react"
