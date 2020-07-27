@@ -36,7 +36,7 @@ declare interface IBundleCache {
 declare type PreloadOptions = {
     secret: string,
     // bundle缓存
-    bundleCache: IBundleCache,
+    bundleCache?: IBundleCache,
 }
 
 declare type CerberusCacheResult = {

@@ -10,6 +10,7 @@ import useBundle from "./useBundle";
 import useUtils from "./useUtils";
 import instance from "../realm/index"
 import CacheSchema from "../realm/cache.schema"
+import useBundleCache from "./useBundleCache";
 
 class CerberusCache<ICerberusCache> {
     get(hash: string) {
@@ -76,10 +77,12 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
 
     const {download} = useUtils();
 
+    const {cache:defaultBundleCache}=useBundleCache()
+
     const preload = async (options: PreloadOptions) => {
         const {
             secret,
-            bundleCache,
+            bundleCache=defaultBundleCache,
         } = options;
         console.log("cerberus", `preload ${secret}`);
         // 每次都必须重新拉取最新的bundle
