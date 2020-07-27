@@ -47,45 +47,8 @@ react-native微应用/微组件纯JS解决方案
     ```
 > NOTE: 目前只支持hooks
 
-[Full Example](https://github.com/m860/cerberus-example)
-
-## Types
-
-```flow js
-const CerberusStatusCode = {
-    // 准备
-    prepare: 0,
-    // 下载中
-    downloading: 10,
-    // 编译中
-    compiling: 20,
-    // 错误
-    error: 90,
-    // 成功
-    success: 100
-};
-type CerberusOption = {
-    /**
-     * 入口文件，例如:http://DOMAIN/main.js
-     */
-    entry: ?string
-        | ?{ url: string, option?: Object },
-    /**
-     * 需要注入到小程序的module
-     */
-    injectModules?: ()=>Object,
-    /**
-     * 默认需要执行的代码
-     */
-    defaultCode?: string
-};
-type CerberusState = {
-    status: $Values<typeof CerberusStatusCode>,
-    error: ?Error
-};
-type useCerberus=(option:CerberusOption)=>[CerberusState,any,Function]
-```
-    
+[Full Example](https://github.com/m860/cerberus-test)
+  
 ## cli配置参数说明
 
 ```flow js
@@ -127,7 +90,6 @@ type ConfigOption={
 ```jsx harmony
 // 在App中使用CerberusContextProvider来自定义client
 import * as React from "react"
-import ApolloClient from "apollo-boost";
 import {CerberusContextProvider} from "@m860/cerberus"
 
 export default function (){
@@ -151,7 +113,5 @@ export default function (){
     <Image source={require("image.png")} style={{width:100,height:100}}/>
     ```
 - `debug`模式下缓存不生效
-- 默认缓存使用`AsyncStorage`，也可以自定义缓存方式
-- 所有的缓存都不会自己清楚，如果要清楚缓存需要自己实现，缓存的`key`可以按照一定的规则来设计。
 - `queryEntry`参数的urls的顺序和配置文件中的顺序可能不一致，不要使用如下方式：`(urls)=>urls[2]`
 

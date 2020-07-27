@@ -1,6 +1,9 @@
 /**
  * @flow
  * @author Jean.h.ma 2020/6/8
+ *
+ * 用于存储bundle的相关信息，并不存储代码
+ *
  */
 import instance from "../realm";
 import BundleSchema from "../realm/bundle.schema";
