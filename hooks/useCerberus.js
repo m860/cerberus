@@ -88,7 +88,13 @@ export function useCerberus(props: CerberusOption): Object {
                 // $FlowFixMe
                 return (new Function(`$REACT$`, `$REACTNATIVE$`, `$MODULES$`, `${code} return __exps__`))(React, ReactNative, {
                     ...injectModules(),
-                    __BASE_URL__: baseURL
+                    __BASE_URL__: baseURL,
+                    // 解析资源
+                    resolveAsset: (url: string) => {
+                        return {
+                            uri: baseURL + url
+                        }
+                    }
                 });
             } catch (ex) {
                 console.log("cerberus", `code compile fail : ${ex.message}`);
