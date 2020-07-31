@@ -101,8 +101,8 @@ export function useCerberus(props: CerberusOption): Object {
             }
         } else {
             console.log("cerberus", `${debug ? "[debug]" : ""}hash(${hash || ""}) use backup`)
-            return backup();
         }
+        return backup();
     }, [code]);
 
     return defined;
