@@ -77,12 +77,12 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
 
     const {download} = useUtils();
 
-    const {cache:defaultBundleCache}=useBundleCache()
+    const {cache: defaultBundleCache} = useBundleCache()
 
     const preload = async (options: PreloadOptions) => {
         const {
             secret,
-            bundleCache=defaultBundleCache,
+            bundleCache = defaultBundleCache,
         } = options;
         console.log("cerberus", `preload ${secret}`);
         // 每次都必须重新拉取最新的bundle
@@ -100,9 +100,13 @@ export default function (cache: ?ICerberusCache): CerberusCacheResult {
                 for (let i = 0; i < urls.length; i++) {
                     const url = urls[i];
                     if (!cacheInstance.has(url)) {
-                        const code = await download(url);
-                        cacheInstance.set(url, code);
-                        count++;
+                        try {
+                            const code = await download(url);
+                            cacheInstance.set(url, code);
+                            count++;
+                        } catch (ex) {
+                            console.log('cerberus', `${url} download failed,${ex.message}`);
+                        }
                     } else {
                         console.log("cerberus", `preload ${secret},code is cached ${url}`);
                     }
