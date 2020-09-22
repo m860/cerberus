@@ -32,8 +32,7 @@
   "peerDependencies": {
     "react": ">=16",
     "react-native": "*",
-    "realm": ">=3",
-    "apollo-boost": "0.4.7"
+    "realm": ">=3"
   },
   "config": {
     "commitizen": {
@@ -42,7 +41,8 @@
   },
   "dependencies": {
     "graphql": "^14.5.8",
-    "socket.io-client": "2.3.0"
+    "socket.io-client": "2.3.0",
+    "apollo-boost": "0.4.7"
   },
   "publishConfig": {
     "access": "public"
